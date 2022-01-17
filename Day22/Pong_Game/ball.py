@@ -25,3 +25,8 @@ class Ball(Turtle):
         
     def bounce_x(self):
         self.x_speed *= -1
+        
+        
+    def refresh(self):
+        self.home()
+        self.bounce_x()
