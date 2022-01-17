@@ -21,6 +21,11 @@ screen.onkeypress(key="s", fun=l_paddle.move_down)
 game_is_on = True
 while game_is_on:
     ball.move()
+    
+    # Detect collision with wall
+    if ball.ycor() >= 290 or ball.ycor() <= -290:
+        ball.change_direction()
+    
     screen.update()
 
 screen.exitonclick()
