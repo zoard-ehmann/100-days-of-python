@@ -1,31 +1,20 @@
-from turtle import Turtle, Screen
-
-DISTANCE = 20
-
-
-def move_up():
-    paddle.sety(paddle.ycor() + DISTANCE)
-
-
-def move_down():
-    paddle.sety(paddle.ycor() - DISTANCE)
-
+from turtle import Screen
+from paddle import Paddle
 
 screen = Screen()
-
 screen.setup(width=800, height=600)
 screen.bgcolor("black")
 screen.title("Pong Game")
 screen.tracer(0)
-screen.listen()
-screen.onkey(key="Up", fun=move_up)
-screen.onkey(key="Down", fun=move_down)
 
-paddle = Turtle("square")
-paddle.color("white")
-paddle.penup()
-paddle.turtlesize(stretch_wid=5, stretch_len=1)
-paddle.setx(350)
+r_paddle = Paddle(350)
+l_paddle = Paddle(-350)
+
+screen.listen()
+screen.onkey(key="Up", fun=r_paddle.move_up)
+screen.onkey(key="Down", fun=r_paddle.move_down)
+screen.onkey(key="w", fun=l_paddle.move_up)
+screen.onkey(key="s", fun=l_paddle.move_down)
 
 game_is_on = True
 while game_is_on:
