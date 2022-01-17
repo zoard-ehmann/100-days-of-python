@@ -24,7 +24,11 @@ while game_is_on:
     
     # Detect collision with wall
     if ball.ycor() >= 290 or ball.ycor() <= -290:
-        ball.change_direction()
+        ball.bounce_y()
+    
+    # Detect collision with paddles
+    if ball.distance(r_paddle) < 50 and ball.xcor() > 335 or ball.distance(l_paddle) < 50 and ball.xcor() < -335:
+        ball.bounce_x()
     
     screen.update()
 

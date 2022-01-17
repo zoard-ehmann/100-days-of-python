@@ -1,6 +1,6 @@
 from turtle import Turtle
 
-BALL_SPEED = .03
+BALL_SPEED = .04
 
 class Ball(Turtle):
     
@@ -19,5 +19,9 @@ class Ball(Turtle):
         self.goto(self.position() + (self.x_speed, self.y_speed))
         
         
-    def change_direction(self):
+    def bounce_y(self):
         self.y_speed *= -1
+        
+        
+    def bounce_x(self):
+        self.x_speed *= -1
