@@ -44,7 +44,3 @@ class CarManager():
                 
     def increase_speed(self):
         self.car_speed += MOVE_INCREMENT
-        
-    
-    def reset_speed(self):
-        self.car_speed = STARTING_MOVE_DISTANCE

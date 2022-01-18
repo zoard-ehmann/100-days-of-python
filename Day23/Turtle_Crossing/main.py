@@ -4,44 +4,49 @@ from car_manager import CarManager
 from scoreboard import Scoreboard
 import time
 
-
-screen = Screen()
-screen.tracer(0)
-screen.setup(width=600, height=600)
-screen.title("Turtle Crossing")
-
-
-player = Player()
-car_manager = CarManager()
-scoreboard = Scoreboard()
+def game():
+    screen = Screen()
+    screen.tracer(0)
+    screen.setup(width=600, height=600)
+    screen.title("Turtle Crossing")
 
 
-screen.listen()
-screen.onkeypress(key="Up", fun=player.move)
+    player = Player()
+    car_manager = CarManager()
+    scoreboard = Scoreboard()
 
 
-game_is_on = True
-while game_is_on:
-    
-    
-    car_manager.generate_cars()
-    car_manager.move()
-    
-    
-    if player.reached_goal():
-        car_manager.increase_speed()
-        scoreboard.increase_level()
+    screen.listen()
+    screen.onkeypress(key="Up", fun=player.move)
+
+
+    game_is_on = True
+    while game_is_on:
+        screen.update()
         
-    
-    for car in car_manager.cars:
-        if player.distance(car) < 20 and car.ycor() < player.ycor() or \
-           player.distance(car) < 28 and car.ycor() > player.ycor() or \
-           player.distance(car) < 30 and car.ycor() == player.ycor():
-            player.reset_player()
-            car_manager.reset_speed()
-            scoreboard.reset_level()
+        car_manager.generate_cars()
+        car_manager.move()
+        
+        
+        if player.reached_goal():
+            car_manager.increase_speed()
+            scoreboard.increase_level()
             
         
+        for car in car_manager.cars:
+            if player.distance(car) < 20 and car.ycor() < player.ycor() or \
+            player.distance(car) < 28 and car.ycor() > player.ycor() or \
+            player.distance(car) < 30 and car.ycor() == player.ycor():
+                game_is_on = False
+                scoreboard.game_over()
+                if screen.textinput("Restart?", "Do you want to play again? Y or N").lower() == "y":
+                    screen.clear()
+                    game()
+        
+        
+        time.sleep(.1)
+        
+        
+    screen.exitonclick()
     
-    time.sleep(.1)
-    screen.update()
+game()
