@@ -29,6 +29,7 @@ def game():
         
         
         if player.reached_goal():
+            player.go_to_start()
             car_manager.increase_speed()
             scoreboard.increase_level()
             
