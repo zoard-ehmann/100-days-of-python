@@ -20,5 +20,5 @@ def greet_with(name, location):
     print(f"Hello {name}")
     print(f"What is it like in {location}?")
 
-greet_with("Zoard", "Veszprem")
+greet_with("Zoard", "Hungary")
 greet_with(location = "Budapest", name = "János")
