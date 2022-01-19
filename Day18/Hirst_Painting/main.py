@@ -1,7 +1,7 @@
 # import colorgram
 # 
 # extracted_colors = []
-# colors = colorgram.extract('image.jpg', 35)
+# colors = colorgram.extract('./Day18/Hirst_Painting/image.jpg', 35)
 # for color in colors:
 #     extracted_colors.append(color.rgb[:])
 #
