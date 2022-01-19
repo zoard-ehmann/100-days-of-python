@@ -1,6 +1,7 @@
 from turtle import Turtle
 ALIGNMENT = "center"
 FONT = ("Courier", 20, "bold")
+HIGH_SCORE_DATA = "./Day24/Snake_Game/data.txt"
 
 class Scoreboard(Turtle):
     
@@ -12,7 +13,7 @@ class Scoreboard(Turtle):
         self.sety(260)
         self.color("white")
         self.score = 0
-        self.high_score = 0
+        self.manage_high_score("r")
         self.update_scoreboard()
         
         
@@ -28,7 +29,16 @@ class Scoreboard(Turtle):
         
     def reset(self):
         if self.score > self.high_score:
-            self.high_score = self.score
+            self.manage_high_score("w")
         self.score = 0
+        self.manage_high_score("r")
         self.update_scoreboard()
+        
+        
+    def manage_high_score(self, action):
+        with open(HIGH_SCORE_DATA, mode=action) as data:
+            if action == "r":
+                self.high_score = int(data.read())
+            elif action == "w":
+                data.write(str(self.score))
         
