@@ -21,9 +21,6 @@ screen.title("U.S. States Game")
 screen.addshape(IMAGE)
 turtle.shape(IMAGE)
 screen.tracer(0)
-# missed_states = {
-#     "State": []
-# }
 
 states_df = pandas.read_csv(STATES)
 number_of_states = len(states_df.state)
@@ -42,11 +39,6 @@ while len(guessed_states) < number_of_states:
         
     screen.update()
 
-# for state in states_df.state.to_list():
-#     if state not in guessed_states:
-#         missed_states["State"].append(state)
-
-# Alternative solution using List Comprehension
 missed_states = {
     "State": [state for state in states_df.state.to_list() if state not in guessed_states],
 }
