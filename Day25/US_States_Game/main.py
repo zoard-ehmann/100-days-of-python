@@ -25,9 +25,6 @@ screen.tracer(0)
 states_df = pandas.read_csv(STATES)
 number_of_states = len(states_df.state)
 guessed_states = []
-missed_states = {
-    "State": []
-}
 
 while len(guessed_states) < number_of_states:
     answer_state = screen.textinput(title=f"{len(guessed_states)}/{number_of_states} States Correct", prompt="Tell a state's name.").title()
@@ -47,7 +44,9 @@ while len(guessed_states) < number_of_states:
 #         missed_states["State"].append(state)
 
 # Alternative solution using List Comprehension
-missed_states["State"] = [state for state in states_df.state.to_list() if state not in guessed_states]
+missed_states = {
+    "State": [state for state in states_df.state.to_list() if state not in guessed_states],
+}
 
 df = pandas.DataFrame(missed_states)
 df.to_csv(TO_LEARN)
