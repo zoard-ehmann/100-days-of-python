@@ -21,6 +21,9 @@ screen.title("U.S. States Game")
 screen.addshape(IMAGE)
 turtle.shape(IMAGE)
 screen.tracer(0)
+# missed_states = {
+#     "State": []
+# }
 
 states_df = pandas.read_csv(STATES)
 number_of_states = len(states_df.state)
