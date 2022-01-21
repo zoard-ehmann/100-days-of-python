@@ -1,6 +1,6 @@
 ,State
-0,Arizona
-1,Arkansas
+0,Alabama
+1,California
 2,Colorado
 3,Connecticut
 4,Delaware
@@ -11,32 +11,38 @@
 9,Illinois
 10,Indiana
 11,Iowa
-12,Louisiana
-13,Maine
-14,Maryland
-15,Massachusetts
-16,Michigan
-17,Minnesota
-18,Mississippi
-19,Missouri
-20,Montana
-21,Nevada
-22,New Hampshire
-23,New Jersey
-24,New Mexico
-25,North Carolina
-26,North Dakota
-27,Oklahoma
-28,Oregon
-29,Pennsylvania
-30,Rhode Island
-31,South Carolina
-32,South Dakota
-33,Tennessee
-34,Texas
-35,Utah
-36,Vermont
-37,Virginia
-38,Washington
-39,West Virginia
-40,Wisconsin
+12,Kansas
+13,Kentucky
+14,Louisiana
+15,Maine
+16,Maryland
+17,Massachusetts
+18,Michigan
+19,Minnesota
+20,Mississippi
+21,Missouri
+22,Montana
+23,Nebraska
+24,Nevada
+25,New Hampshire
+26,New Jersey
+27,New Mexico
+28,New York
+29,North Carolina
+30,North Dakota
+31,Ohio
+32,Oklahoma
+33,Oregon
+34,Pennsylvania
+35,Rhode Island
+36,South Carolina
+37,South Dakota
+38,Tennessee
+39,Texas
+40,Utah
+41,Vermont
+42,Virginia
+43,Washington
+44,West Virginia
+45,Wisconsin
+46,Wyoming

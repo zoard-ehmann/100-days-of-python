@@ -42,9 +42,12 @@ while len(guessed_states) < number_of_states:
         
     screen.update()
 
-for state in states_df.state.to_list():
-    if state not in guessed_states:
-        missed_states["State"].append(state)
+# for state in states_df.state.to_list():
+#     if state not in guessed_states:
+#         missed_states["State"].append(state)
+
+# Alternative solution using List Comprehension
+missed_states["State"] = [state for state in states_df.state.to_list() if state not in guessed_states]
 
 df = pandas.DataFrame(missed_states)
 df.to_csv(TO_LEARN)
