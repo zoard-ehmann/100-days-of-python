@@ -1,6 +1,8 @@
 from tkinter import *
 import math
 
+import pygame
+
 
 # ---------------------------- CONSTANTS ------------------------------- #
 PINK = "#e2979c"
@@ -38,12 +40,17 @@ def start_timer():
     if reps % 8 == 0:
         title.config(text="Break", fg=RED)
         count_down(long_break_sec)
+        pygame.mixer.music.load("Day28/Pomodoro/notification_1.mp3")
     elif reps % 2 == 0:
         title.config(text="Break", fg=PINK)
         count_down(short_break_sec)
+        pygame.mixer.music.load("Day28/Pomodoro/notification_2.mp3")
     else:
         title.config(text="Work", fg=GREEN)
         count_down(work_sec)
+        pygame.mixer.music.load("Day28/Pomodoro/notification_3.mp3")
+        
+    pygame.mixer.music.play(1, 0.0)
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
@@ -74,6 +81,7 @@ def count_down(count):
 
 
 # ---------------------------- UI SETUP ------------------------------- #
+pygame.init()
 window = Tk()
 window.title("Pomodoro")
 window.config(padx=100, pady=50, bg=YELLOW)
