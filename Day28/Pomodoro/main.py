@@ -14,9 +14,11 @@ LONG_BREAK_MIN = 20
 reps = 0
 timer = None
 
+
 # ---------------------------- TIMER RESET ------------------------------- # 
 def reset_timer():
     global reps
+    start_button["state"] = "normal"
     reps = 0
     window.after_cancel(timer)
     canvas.itemconfig(timer_text, text="00:00")
@@ -27,6 +29,7 @@ def reset_timer():
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
 def start_timer():
     global reps
+    start_button["state"] = "disabled"
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
@@ -45,6 +48,7 @@ def start_timer():
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- # 
 def count_down(count):
+    global reps
     count_min = math.floor(count / 60)
     count_sec = count % 60
     
@@ -60,9 +64,13 @@ def count_down(count):
         start_timer()
         work_sessions = math.floor(reps / 2)
         checkmark_string = ""
+        
         for _ in range(work_sessions):
             checkmark_string += "✔"
         checkmarks.config(text=checkmark_string)
+        
+        if work_sessions >= 4:
+            reps = 0
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -87,6 +95,5 @@ reset_button.grid(row=2, column=2)
 
 checkmarks = Label(fg=GREEN, bg=YELLOW, font=(FONT_NAME, 20))
 checkmarks.grid(row=3, column=1)
-
 
 window.mainloop()
