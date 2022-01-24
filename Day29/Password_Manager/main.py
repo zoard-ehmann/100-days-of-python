@@ -1,14 +1,26 @@
 from tkinter import *
+from tkinter import messagebox
+
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    with open("Day29\Password_Manager\data.txt", mode="a") as data:
-        data.write(f"{entry_website.get()} | {entry_username.get()} | {entry_password.get()}\n")
-    entry_website.delete(0, END)
-    entry_password.delete(0, END)
-    entry_website.focus()
+    website = entry_website.get()
+    username = entry_username.get()
+    password = entry_password.get()
+    
+    if len(website) == 0 or len(username) == 0 or len(password) == 0:
+        messagebox.showerror(title="Blank Fields", message="One or more fields are empty.")
+    else:
+        is_correct = messagebox.askokcancel(title=website, message=f"Email: {username}\nPassword: {password}\nIs it correct?")
+        
+        if is_correct:
+            with open("Day29\Password_Manager\data.txt", mode="a") as data:
+                data.write(f"{website} | {username} | {password}\n")
+            entry_website.delete(0, END)
+            entry_password.delete(0, END)
+            entry_website.focus()
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
