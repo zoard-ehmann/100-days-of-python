@@ -7,7 +7,7 @@ from tkinter import *
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Password Manager")
-window.config(padx=20, pady=20)
+window.config(padx=50, pady=50)
 
 logo = PhotoImage(file="Day29\Password_Manager\logo.png")
 canvas = Canvas(width=200, height=200, highlightthickness=0)
@@ -22,11 +22,11 @@ label_password = Label(text="Password:", width=15, anchor="e")
 # Entries
 entry_website = Entry(width=54)
 entry_username = Entry(width=54)
-entry_password = Entry(width=36)
+entry_password = Entry(width=35)
 
 # Buttons
 button_generate = Button(text="Generate Password")
-button_add = Button(text="Add", width=46)
+button_add = Button(text="Add", width=45)
 
 # Layout
 label_website.grid(row=1, column=0)
