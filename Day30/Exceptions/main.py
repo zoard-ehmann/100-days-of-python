@@ -14,18 +14,28 @@
 # text = "abc"
 # print(text + 5)
 
-try:
-    file = open("Day30/Exceptions/a_file.txt")
-    a_dictionary = {"key": "value"}
-    value = a_dictionary["key"]
-except FileNotFoundError:
-    file = open("Day30/Exceptions/a_file.txt", "w")
-    file.write("Something")
-except KeyError as error_message:
-    print(f"The key {error_message} does not exist.")
-else:
-    content = file.read()
-    print(content)
-finally:
-    file.close()
-    print("File was closed.")
+# Catching exceptions
+# try:
+#     file = open("Day30/Exceptions/a_file.txt")
+#     a_dictionary = {"key": "value"}
+#     value = a_dictionary["key"]
+# except FileNotFoundError:
+#     file = open("Day30/Exceptions/a_file.txt", "w")
+#     file.write("Something")
+# except KeyError as error_message:
+#     print(f"The key {error_message} does not exist.")
+# else:
+#     content = file.read()
+#     print(content)
+# finally:
+#     # Raising an exception
+#     raise TypeError("This is a fictional error.")
+
+height = float(input("Height: "))
+weight = float(input("Weight: "))
+
+if height > 3:
+    raise ValueError("Human height should not be over 3 meters")
+
+bmi = weight / height ** 2
+print(bmi)
