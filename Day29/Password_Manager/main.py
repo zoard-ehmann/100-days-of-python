@@ -36,7 +36,7 @@ def save():
         is_correct = messagebox.askokcancel(title=website, message=f"Email: {username}\nPassword: {password}\nIs it correct?")
         
         if is_correct:
-            with open("Day29\Password_Manager\data.txt", mode="a") as data:
+            with open("Day29/Password_Manager/data.txt", mode="a") as data:
                 data.write(f"{website} | {username} | {password}\n")
             entry_website.delete(0, END)
             entry_password.delete(0, END)
@@ -48,7 +48,7 @@ window = Tk()
 window.title("Password Manager")
 window.config(padx=50, pady=50)
 
-logo = PhotoImage(file="Day29\Password_Manager\logo.png")
+logo = PhotoImage(file="Day29/Password_Manager/logo.png")
 canvas = Canvas(width=200, height=200, highlightthickness=0)
 canvas.create_image(100, 100, image=logo)
 canvas.grid(row=0, column=1)
