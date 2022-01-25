@@ -40,15 +40,15 @@ def save():
     if len(website) == 0 or len(username) == 0 or len(password) == 0:
         messagebox.showerror(title="Blank Fields", message="One or more fields are empty.")
     else:
-        with open("Day29/Password_Manager/data.json", mode="r") as auth_data:
-            # Reading old data
-            data = json.load(auth_data)
-            # Updating old data with new data
-            data.update(new_data)
-
-        with open("Day29/Password_Manager/data.json", mode="w") as auth_data:
-            # Saving updated data
-            json.dump(data, auth_data, indent=4)
+        try:
+            with open("Day29/Password_Manager/data.json", mode="r") as data_file:
+                data = json.load(data_file)
+                data.update(new_data)
+        except FileNotFoundError:
+            data = new_data
+        finally:
+            with open("Day29/Password_Manager/data.json", mode="w") as data_file:
+                json.dump(data, data_file, indent=4)
 
         entry_website.delete(0, END)
         entry_password.delete(0, END)
