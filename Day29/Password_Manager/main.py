@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from random import choice, randint, shuffle
+import json
 
 import pyperclip
 
@@ -29,18 +30,29 @@ def save():
     website = entry_website.get()
     username = entry_username.get()
     password = entry_password.get()
+    new_data = {
+        website: {
+            "username": username,
+            "password": password,
+        }
+    }
     
     if len(website) == 0 or len(username) == 0 or len(password) == 0:
         messagebox.showerror(title="Blank Fields", message="One or more fields are empty.")
     else:
-        is_correct = messagebox.askokcancel(title=website, message=f"Email: {username}\nPassword: {password}\nIs it correct?")
-        
-        if is_correct:
-            with open("Day29/Password_Manager/data.txt", mode="a") as data:
-                data.write(f"{website} | {username} | {password}\n")
-            entry_website.delete(0, END)
-            entry_password.delete(0, END)
-            entry_website.focus()
+        with open("Day29/Password_Manager/data.json", mode="r") as auth_data:
+            # Reading old data
+            data = json.load(auth_data)
+            # Updating old data with new data
+            data.update(new_data)
+
+        with open("Day29/Password_Manager/data.json", mode="w") as auth_data:
+            # Saving updated data
+            json.dump(data, auth_data, indent=4)
+
+        entry_website.delete(0, END)
+        entry_password.delete(0, END)
+        entry_website.focus()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
