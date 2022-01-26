@@ -1,15 +1,26 @@
 import random
 from tkinter import *
+from tkinter import messagebox
 
 import pandas
 
 
 BACKGROUND_COLOR = "#B1DDC6"
 FONT = "Arial"
-WORD_LIST = pandas.read_csv("Day31/data/german_words.csv")
 SECONDS = 3 * 1000
 
-unknown_words = WORD_LIST.to_dict(orient="records")
+
+def load_words():
+    try:
+        WORD_LIST = pandas.read_csv("Day31/data/words_to_learn.csv")
+    except FileNotFoundError:
+        WORD_LIST = pandas.read_csv("Day31/data/german_words.csv")
+    finally:
+        try:
+            return WORD_LIST.to_dict(orient="records")
+        except UnboundLocalError:
+            messagebox.showinfo(title="Finished", message="You've learned all the words! Congratulations!")
+            exit()
 
 
 def flip_card(word, side):
@@ -32,9 +43,21 @@ def flip_card(word, side):
 
 
 def next_card():
-    random_word = random.choice(unknown_words)
-    flip_card(random_word, 0)
-    window.after(SECONDS, flip_card, random_word, 1)
+    global current_card
+    if len(words_to_learn) > 0:
+        current_card = random.choice(words_to_learn)
+        flip_card(current_card, 0)
+        window.after(SECONDS, flip_card, current_card, 1)
+    else:
+        messagebox.showinfo(title="Well Done", message="You've learned all the words! Congratulations!")
+        window.destroy()
+
+
+def known():
+    words_to_learn.remove(current_card)
+    df = pandas.DataFrame(words_to_learn)
+    df.to_csv("Day31/data/words_to_learn.csv", index=False)
+    next_card()
 
 
 window = Tk()
@@ -55,8 +78,11 @@ card.grid(row=0, column=0, columnspan=2)
 wrong_ans = Button(image=cross, highlightthickness=0, borderwidth=0, command=next_card)
 wrong_ans.grid(row=1, column=0)
 
-correct_ans = Button(image=checkmark, highlightthickness=0, borderwidth=0, command=next_card)
+correct_ans = Button(image=checkmark, highlightthickness=0, borderwidth=0, command=known)
 correct_ans.grid(row=1, column=1)
 
+current_card = {}
+words_to_learn = load_words()
 next_card()
+
 window.mainloop()
