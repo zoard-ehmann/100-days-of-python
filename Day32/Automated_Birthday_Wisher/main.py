@@ -1,7 +1,7 @@
 import pandas
-import random
 import smtplib
 import os
+from random import randint
 from datetime import datetime
 
 from dotenv import load_dotenv
@@ -27,7 +27,7 @@ bday_today = bday_this_month[bday_this_month.day == now.day]
 # Loop through the list of people who has birthday today
 for index, row in bday_today.iterrows():
     # Open the template, insert the name and send the letter
-    with open(f"Day32/Automated_Birthday_Wisher/letter_templates/letter_{random.randint(1, 3)}.txt") as template:
+    with open(f"Day32/Automated_Birthday_Wisher/letter_templates/letter_{randint(1, 3)}.txt") as template:
         letter = template.read().replace(PLACEHOLDER, row["name"])
         with smtplib.SMTP(smtp_host, smtp_port) as connection:
             connection.starttls()
