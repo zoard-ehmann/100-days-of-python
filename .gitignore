@@ -1,2 +1,6 @@
 /env
 **/__pycache__
+**/.env
+
+**/Password_Manager/.key
+**/Password_Manager/data.json
