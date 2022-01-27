@@ -14,10 +14,8 @@ my_email = os.getenv("MY_EMAIL")
 my_password = os.getenv("MY_PASSWORD")
 smtp_host = os.getenv("SMTP_HOST")
 smtp_port = os.getenv("SMTP_PORT")
-
-
-# Get current month and day
 now = datetime.today()
+
 
 # Read the birthday file and check if someone has birthday today
 birthdays = pandas.read_csv("Day32/Automated_Birthday_Wisher/birthdays.csv")
