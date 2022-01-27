@@ -18,13 +18,11 @@ smtp_port = os.getenv("SMTP_PORT")
 
 # Get current month and day
 now = dt.datetime.today()
-current_month = now.month
-current_day = now.day
 
 # Read the birthday file and check if someone has birthday today
 birthdays = pandas.read_csv("Day32/Automated_Birthday_Wisher/birthdays.csv")
-bday_this_month = birthdays[birthdays.month == current_month]
-bday_today = bday_this_month[bday_this_month.day == current_day]
+bday_this_month = birthdays[birthdays.month == now.month]
+bday_today = bday_this_month[bday_this_month.day == now.day]
 
 # Loop through the list of people who has birthday today
 for index, row in bday_today.iterrows():
