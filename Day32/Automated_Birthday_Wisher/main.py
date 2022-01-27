@@ -1,13 +1,41 @@
-##################### Extra Hard Starting Project ######################
+import pandas
+import random
+import smtplib
+import os
+import datetime as dt
 
-# 1. Update the birthdays.csv
-
-# 2. Check if today matches a birthday in the birthdays.csv
-
-# 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
-
-# 4. Send the letter generated in step 3 to that person's email address.
+from dotenv import load_dotenv
 
 
+# Load environment variables and define global variables
+load_dotenv()
+PLACEHOLDER = "[NAME]"
+my_email = os.getenv("MY_EMAIL")
+my_password = os.getenv("MY_PASSWORD")
+smtp_host = os.getenv("SMTP_HOST")
+smtp_port = os.getenv("SMTP_PORT")
 
 
+# Get current month and day
+now = dt.datetime.today()
+current_month = now.month
+current_day = now.day
+
+# Read the birthday file and check if someone has birthday today
+birthdays = pandas.read_csv("Day32/Automated_Birthday_Wisher/birthdays.csv")
+bday_this_month = birthdays[birthdays.month == current_month]
+bday_today = bday_this_month[bday_this_month.day == current_day]
+
+# Loop through the list of people who has birthday today
+for index, row in bday_today.iterrows():
+    # Open the template, insert the name and send the letter
+    with open(f"Day32/Automated_Birthday_Wisher/letter_templates/letter_{random.randint(1, 3)}.txt") as template:
+        letter = template.read().replace(PLACEHOLDER, row["name"])
+        with smtplib.SMTP(smtp_host, smtp_port) as connection:
+            connection.starttls()
+            connection.login(my_email, my_password)
+            connection.sendmail(
+                from_addr=my_email,
+                to_addrs=row["email"],
+                msg=f"Subject:Happy Birthday!\n\n{letter}"
+            )
