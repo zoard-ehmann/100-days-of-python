@@ -65,8 +65,8 @@ def iss_above():
 
 
 while True:
+    time.sleep(60)
     if iss_above() and is_dark():
-        time.sleep(60)
         with smtplib.SMTP(host=SMTP_HOST, port=SMTP_PORT) as connection:
             connection.starttls()
             connection.login(user=MY_EMAIL, password=MY_PASSWORD)
