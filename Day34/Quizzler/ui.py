@@ -23,11 +23,11 @@ class QuizInterface():
         self.question_box.grid(row=1, column=0, columnspan=2, pady=PADDING)
         
         false_image = tk.PhotoImage(file="Day34/Quizzler/images/false.png")
-        self.false_btn = tk.Button(image=false_image, highlightthickness=0, bd=0)
+        self.false_btn = tk.Button(image=false_image, highlightthickness=0, bd=0, command=self.is_false)
         self.false_btn.grid(row=2, column=0)
         
         true_image = tk.PhotoImage(file="Day34/Quizzler/images/true.png")
-        self.true_btn = tk.Button(image=true_image, highlightthickness=0, bd=0)
+        self.true_btn = tk.Button(image=true_image, highlightthickness=0, bd=0, command=self.is_true)
         self.true_btn.grid(row=2, column=1)
         
         self.get_next_question()
@@ -36,3 +36,9 @@ class QuizInterface():
     def get_next_question(self):
         q_text = self.quiz.next_question()
         self.question_box.itemconfig(self.question_text, text=q_text)
+        
+    def is_false(self):
+        self.quiz.check_answer("False")
+        
+    def is_true(self):
+        self.quiz.check_answer("True")
