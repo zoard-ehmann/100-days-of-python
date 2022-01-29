@@ -5,14 +5,12 @@ from ui import QuizInterface
 
 
 question_bank = []
-quiz = QuizBrain(question_bank)
-quiz_ui = QuizInterface()
 
 for question in question_data:
     question_bank.append(Question(question["question"], question["correct_answer"]))
 
-# while quiz.still_has_questions():
-#     quiz.next_question()
+quiz = QuizBrain(question_bank)
+quiz_ui = QuizInterface(quiz)
 
 print("You've completed the quiz.")
 print(f"Your final score was: {quiz.score}/{quiz.question_number}.")

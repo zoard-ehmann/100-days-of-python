@@ -1,4 +1,5 @@
 import tkinter as tk
+from quiz_brain import QuizBrain
 
 
 THEME_COLOR = "#375362"
@@ -8,7 +9,8 @@ PADDING = 30
 
 class QuizInterface():
     
-    def __init__(self):
+    def __init__(self, quiz_brain: QuizBrain):
+        self.quiz = quiz_brain
         self.window = tk.Tk()
         self.window.title("Quizzler")
         self.window.config(bg=THEME_COLOR, padx=PADDING, pady=PADDING)
@@ -28,4 +30,9 @@ class QuizInterface():
         self.true_btn = tk.Button(image=true_image, highlightthickness=0, bd=0)
         self.true_btn.grid(row=2, column=1)
         
+        self.get_next_question()
         self.window.mainloop()
+        
+    def get_next_question(self):
+        q_text = self.quiz.next_question()
+        self.question_box.itemconfig(self.question_text, text=q_text)
