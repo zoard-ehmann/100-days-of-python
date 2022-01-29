@@ -5,6 +5,7 @@ API_ENDPOINT = "https://opentdb.com/api.php"
 PARAMETERS = {
     "amount": 10,
     "type": "boolean",
+    "category": 18,
 }
 
 

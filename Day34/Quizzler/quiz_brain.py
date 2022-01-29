@@ -18,11 +18,9 @@ class QuizBrain:
         sanitized_q_text = html.unescape(self.current_question.text)
         return f"Q.{self.question_number}: {sanitized_q_text}"
 
-    def check_answer(self, user_answer: str):
+    def check_answer(self, user_answer: str) -> bool:
         if user_answer.lower() == self.current_question.answer.lower():
-            print("You got it right!")
             self.score += 1
+            return True
         else:
-            print("That's wrong.")
-        print(f"Your current score is: {self.score}/{self.question_number}")
-        print()
+            return False
