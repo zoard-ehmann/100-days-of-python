@@ -19,11 +19,6 @@ AV_PARAMS = {
     "outputsize": "compact",
     "apikey": os.getenv("AV_KEY"),
 }
-NEWS_API = "https://newsapi.org/v2/everything"
-NEWS_PARAMS = {
-    "qInTitle": COMPANY_NAME,
-    "apiKey": os.getenv("NEWS_KEY"),
-}
 
 
 def remove_tags(text):
