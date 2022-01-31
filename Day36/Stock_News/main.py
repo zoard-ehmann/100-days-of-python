@@ -21,7 +21,7 @@ AV_PARAMS = {
 }
 NEWS_API = "https://newsapi.org/v2/everything"
 NEWS_PARAMS = {
-    "q": COMPANY_NAME,
+    "qInTitle": COMPANY_NAME,
     "apiKey": os.getenv("NEWS_KEY"),
 }
 
