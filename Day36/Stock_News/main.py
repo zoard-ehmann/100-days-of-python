@@ -47,10 +47,7 @@ def get_news():
     recent_news = all_articles["articles"][:3]
 
     for news in recent_news:
-        title = news["title"]
-        brief = remove_tags(news["description"])
-        article = news["url"]
-        send_alert(title, brief, article)
+        send_alert(news["title"], remove_tags(news["description"], news["url"]))
 
 
 with requests.Session() as s:
