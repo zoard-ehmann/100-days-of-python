@@ -1,24 +1,76 @@
+import os
+import re
+import requests
+
+from newsapi import NewsApiClient
+from twilio.rest import Client
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
+TAG_RE = re.compile(r'<[^>]+>')
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
+AV_API = f"https://www.alphavantage.co/query"
+AV_PARAMS = {
+    "function": "TIME_SERIES_DAILY",
+    "symbol": STOCK,
+    "outputsize": "compact",
+    "apikey": os.getenv("AV_KEY"),
+}
+NEWS_API = "https://newsapi.org/v2/everything"
+NEWS_PARAMS = {
+    "q": COMPANY_NAME,
+    "apiKey": os.getenv("NEWS_KEY"),
+}
 
-## STEP 1: Use https://www.alphavantage.co
-# When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 
-## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
-
-## STEP 3: Use https://www.twilio.com
-# Send a seperate message with the percentage change and each article's title and description to your phone number. 
+def remove_tags(text):
+    return TAG_RE.sub("", text)
 
 
-#Optional: Format the SMS message like this: 
-"""
-TSLA: 🔺2%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-or
-"TSLA: 🔻5%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-"""
+def send_alert(title: str, brief: str, article: str):
+    account_sid = os.getenv("TWILIO_SID")
+    auth_token = os.getenv("TWILIO_KEY")
+    client = Client(account_sid, auth_token)
 
+    message = client.messages \
+                    .create(
+                        body=f"{STOCK}: {direction}{diff}%\n\nTitle: {title}\n\nBrief: {brief}\n\nArticle: {article}",
+                        from_=os.getenv("TWILIO_PHONE_NR"),
+                        to=os.getenv("PHONE_NR")
+                    )
+
+    print(message.status)
+
+
+def get_news():
+    newsapi = NewsApiClient(api_key=os.getenv("NEWS_KEY"))
+
+    all_articles = newsapi.get_everything(q=COMPANY_NAME, language='en')
+    recent_news = all_articles["articles"][:3]
+
+    for news in recent_news:
+        title = news["title"]
+        brief = remove_tags(news["description"])
+        article = news["url"]
+        send_alert(title, brief, article)
+
+
+with requests.Session() as s:
+    download = s.get(url=AV_API, params=AV_PARAMS)
+    download.raise_for_status()
+    stock_data = download.json()
+
+last_two_days = list(stock_data["Time Series (Daily)"].items())[:2]
+day_zero = float(last_two_days[0][1]["4. close"])
+day_minus_one = float(last_two_days[-1][1]["4. close"])
+diff = round(abs(100 - (day_zero / day_minus_one * 100)))
+
+if diff >= 5:
+    if day_zero > day_minus_one:
+        direction = "🔺"
+    else:
+        direction = "🔻"
+    get_news()
