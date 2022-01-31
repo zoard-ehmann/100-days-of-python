@@ -10,8 +10,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TAG_RE = re.compile(r'<[^>]+>')
+
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
+
 AV_API = f"https://www.alphavantage.co/query"
 AV_PARAMS = {
     "function": "TIME_SERIES_DAILY",
