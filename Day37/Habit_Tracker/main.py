@@ -14,6 +14,7 @@ HEADERS = {
     "X-USER-TOKEN": TOKEN
 }
 GRAPH_ID = "graph1"
+TODAY = datetime(year=2022, month=1, day=30).strftime("%Y%m%d")
 
 # Create a user
 # user_params = {
@@ -43,13 +44,25 @@ GRAPH_ID = "graph1"
 # response.close()
 
 # Create a pixel
-today = datetime(year=2022, month=1, day=30)
+# pixel_config = {
+#     "date": TODAY,
+#     "quantity": "2.98",
+# }
+# 
+# response = requests.post(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}", json=pixel_config, headers=HEADERS)
+# print(response.text)
+# response.close()
 
-pixel_config = {
-    "date": today.strftime("%Y%m%d"),
-    "quantity": "2.98",
-}
+# Update a pixel
+# update_config = {
+#     "quantity": "38.3",
+# }
+# 
+# response = requests.put(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}/{TODAY}", json=update_config, headers=HEADERS)
+# print(response.text)
+# response.close()
 
-response = requests.post(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}", json=pixel_config, headers=HEADERS)
+# Delete a pixel
+response = requests.delete(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}/{TODAY}", headers=HEADERS)
 print(response.text)
 response.close()
