@@ -43,12 +43,11 @@ GRAPH_ID = "graph1"
 # response.close()
 
 # Create a pixel
-today = str(datetime.today())
-date = today.split()[0].replace("-", "")
+today = datetime(year=2022, month=1, day=30)
 
 pixel_config = {
-    "date": date,
-    "quantity": "3.25",
+    "date": today.strftime("%Y%m%d"),
+    "quantity": "2.98",
 }
 
 response = requests.post(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}", json=pixel_config, headers=HEADERS)
