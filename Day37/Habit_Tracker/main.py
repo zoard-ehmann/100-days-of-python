@@ -13,6 +13,7 @@ PIXELA_ENDPOINT = "https://pixe.la/v1/users"
 HEADERS = {
     "X-USER-TOKEN": TOKEN
 }
+GRAPH_ID = "graph1"
 
 # Create a user
 # user_params = {
@@ -21,7 +22,7 @@ HEADERS = {
 #     "agreeTermsOfService": "yes",
 #     "notMinor": "yes",
 # }
-# 
+#
 # response = requests.post(url=PIXELA_ENDPOINT, json=user_params)
 # response.raise_for_status()
 # print(response.text)
@@ -30,7 +31,7 @@ HEADERS = {
 # Create a graph
 # graph_endpoint = f"{PIXELA_ENDPOINT}/{USERNAME}/graphs"
 # graph_config = {
-#     "id": "graph1",
+#     "id": GRAPH_ID,
 #     "name": "Running Graph",
 #     "unit": "Km",
 #     "type": "float",
@@ -42,15 +43,14 @@ HEADERS = {
 # response.close()
 
 # Create a pixel
-
 today = str(datetime.today())
 date = today.split()[0].replace("-", "")
 
-post_config = {
+pixel_config = {
     "date": date,
-    "quantity": "10",
+    "quantity": "3.25",
 }
 
-response = requests.post(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/graph1", json=post_config, headers=HEADERS)
+response = requests.post(url=f"{PIXELA_ENDPOINT}/{USERNAME}/graphs/{GRAPH_ID}", json=pixel_config, headers=HEADERS)
 print(response.text)
 response.close()
