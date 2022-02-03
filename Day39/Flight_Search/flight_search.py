@@ -15,23 +15,34 @@ TQ_HEADER = {
 class FlightSearch:
     #This class is responsible for talking to the Flight Search API.
     def __init__(self):
-        self.city_codes = []
+        pass
     
-    def get_city_codes(self, cities: list):
-        """Collects the city codes of the passed in cities into a list
+    def populate_iata(self, cities: list) -> list:
+        """Populates city IATA codes of the passed in city dictionary entries and returns the new list
 
         Args:
-            cities (list): a list of city names
+            cities (list): a list of city dictionaries with name, lowest price and ID
+
+        Returns:
+            list: a list of city dictionaries with ID and IATA
         """
         
+        complete_cities = {}
         tq_params = {
             "location_types": "city",
             "limit": 1,
         }
         
-        for city in cities:
-            tq_params["term"] = city
+        for city_data in cities:
+            tq_params["term"] = city_data["city"]
+            
             with requests.Session() as session:
                 response = session.get(url=f"{TQ_API}/locations/query", params=tq_params, headers=TQ_HEADER)
                 response.raise_for_status()
-                self.city_codes.append(response.json()["locations"][0]["code"])
+                city_code = response.json()["locations"][0]["code"]
+                city_data["iataCode"] = city_code
+                
+            complete_cities[city_data["id"]] = city_code
+        
+        return complete_cities
+            

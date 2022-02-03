@@ -1,6 +1,10 @@
 #This file will need to use the DataManager,FlightSearch, FlightData, NotificationManager classes to achieve the program requirements.
 from flight_search import FlightSearch
+from data_manager import DataManager
 
+
+data_manager = DataManager()
 flight_search = FlightSearch()
-flight_search.get_city_codes(["Paris", "London", "Tokyo"])
-print(flight_search.city_codes)
+
+all_cities = data_manager.get_cities()
+flight_search.populate_iata(cities=all_cities)
