@@ -20,13 +20,13 @@ class DataManager:
         self.all_cities = [
             {
             "city": "Paris",
-            "iataCode": "",
+            "iataCode": "PAR",
             "lowestPrice": 54,
             "id": 2
             },
             {
             "city": "Berlin",
-            "iataCode": "",
+            "iataCode": "BER",
             "lowestPrice": 42,
             "id": 3
             },
