@@ -5,6 +5,7 @@ from flight_data import FlightData
 from notification_manager import NotificationManager
 
 
+EMAIL = True
 SMS = False
 
 
@@ -28,6 +29,5 @@ for city in data_manager.get_cities():
         
         if len(flight_data.flight_details) != 0 and flight_data.flight_details["price"] <= city["lowestPrice"]:
             print(notification_manager.structure_message(flight_data=flight_data))
-            notification_manager.send_email(flight_data=flight_data, users=data_manager.get_subscribers())
-            if SMS:
-                notification_manager.send_sms(flight_data=flight_data)
+            if EMAIL: notification_manager.send_email(flight_data=flight_data, users=data_manager.get_subscribers())
+            if SMS: notification_manager.send_sms(flight_data=flight_data)
