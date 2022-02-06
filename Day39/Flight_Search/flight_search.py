@@ -46,7 +46,6 @@ class FlightSearch:
             try:
                 city_iata = response.json()["locations"][0]["code"]
             except IndexError:
-                print(f"City not found: {city_data['city']} - Ignoring from search...\n")
                 city_iata = ""
             
             return city_iata

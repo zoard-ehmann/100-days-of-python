@@ -33,13 +33,13 @@ class NotificationManager:
             str: Formatted notification message.
         """
         currency = "EUR" #TODO: use EUR symbol
-        msg_segments = [f"Price: {flight_data.flight_details['price']}{currency}\n"]
+        msg_segments = [f"Price: {flight_data.details['price']}{currency}\n"]
         
-        for station in flight_data.flight_details["stations"]:
+        for station in flight_data.details["stations"]:
             msg_segments.append(f"From {station['from_city']}({station['from_airport']}) to {station['to_city']}({station['to_airport']})")
             msg_segments.append(f"{station['from_date']} - {station['to_date']} (UTC)\n")
             
-        msg_segments.append(flight_data.flight_details["link"])
+        msg_segments.append(flight_data.details["link"])
         final_msg = "\n".join(msg_segments)
         return final_msg
 
