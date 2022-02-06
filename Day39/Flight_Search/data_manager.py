@@ -21,10 +21,10 @@ class DataManager:
         self.all_cities: list
        
     def get_cities(self) -> list:
-        """Returns a list of city dictionaries from the spreadsheet with the relevant information
+        """Returns a list of city dictionaries from the spreadsheet with the relevant information.
 
         Returns:
-            list: list of city dictionaries with name, lowest price and ID
+            list: List of city dictionaries with name, (IATA), lowest price and ID.
         """
         with requests.Session() as session:
             response = session.get(url=ST_API_PRICES, headers=ST_HEADER)
@@ -34,11 +34,11 @@ class DataManager:
         return self.all_cities
     
     def insert_iata(self, city_data: dict, city_iata: str):
-        """Inserts IATA code for the corresponding city
+        """Inserts IATA code for the corresponding city.
 
         Args:
-            city_data (dict): a city dictionary with name, lowest price and ID
-            city_iata (str): IATA code for the city
+            city_data (dict): A city dictionary with name, lowest price and ID.
+            city_iata (str): IATA code for the city.
         """
         iata_code = {
             "price": {
@@ -50,7 +50,12 @@ class DataManager:
             response = session.put(url=f"{ST_API_PRICES}/{city_data['id']}", json=iata_code, headers=ST_HEADER)
             response.raise_for_status()
         
-    def get_subscribers(self):
+    def get_subscribers(self) -> list:
+        """Fetches all the user information from the spreadsheet and returns the user list.
+
+        Returns:
+            list: List of the user dictionaries with first name, last name and email address.
+        """
         with requests.Session() as session:
             response = session.get(url=f"{ST_API_USERS}", headers=ST_HEADER)
             response.raise_for_status()

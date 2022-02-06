@@ -18,15 +18,20 @@ for city in data_manager.get_cities():
         flight_search = FlightSearch()
         data_manager.insert_iata(city_data=city, city_iata=flight_search.get_iata(city))
 
-# Get cheapest fligths
 for city in data_manager.get_cities():
+    
+    # Only process the city if it has an IATA code
     if len(city["iataCode"]) != 0:
         flight_search = FlightSearch()
         flight_data = FlightData()
         
+        # Get the cheapest flight to the city
         cheapest_flight = flight_search.get_cheapest_flight(city_data=city, stop_overs=3)
+        
+        # Save the most relevant flight details
         flight_data.data_collector(cheapest_flight)
         
+        # Only process the valid flights within the budget
         if len(flight_data.flight_details) != 0 and flight_data.flight_details["price"] <= city["lowestPrice"]:
             print(notification_manager.structure_message(flight_data=flight_data))
             if EMAIL: notification_manager.send_email(flight_data=flight_data, users=data_manager.get_subscribers())

@@ -7,6 +7,11 @@ class FlightData:
         self.flight_details = {}
     
     def data_collector(self, flight_data: dict):
+        """Collects the most relevant data of the flight and saves it as a dictionary.
+
+        Args:
+            flight_data (dict): Returned flight details from Tequila API.
+        """
         if flight_data != None:
             self.flight_details["link"] = flight_data["data"][0]["deep_link"]
             self.flight_details["price"] = flight_data["data"][0]["price"]

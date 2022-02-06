@@ -25,13 +25,13 @@ class FlightSearch:
         self.flight = None
     
     def get_iata(self, city_data: dict) -> str:
-        """Get the IATA code of the city
+        """Gets the IATA code of the city.
 
         Args:
-            city (dict): a city dictionary with name, lowest price and ID
+            city (dict): A city dictionary with name, lowest price and ID.
 
         Returns:
-            str: city's IATA code
+            str: City's IATA code.
         """
         tq_params = {
             "term": city_data["city"],
@@ -51,7 +51,17 @@ class FlightSearch:
             
             return city_iata
         
-    def get_cheapest_flight(self, city_data: dict, stop_overs = MAX_STOPOVERS, via_city = STOPOVER_CITIES):
+    def get_cheapest_flight(self, city_data: dict, stop_overs: int = MAX_STOPOVERS, via_city: str = STOPOVER_CITIES) -> dict:
+        """Gets the cheapest flight to a particular city.
+
+        Args:
+            city_data (dict): Details of the target city.
+            stop_overs (int, optional): Number of maximum stop-overs. Defaults to MAX_STOPOVERS.
+            via_city (str, optional): Stop-over airports as comma-separated values. Defaults to STOPOVER_CITIES.
+
+        Returns:
+            dict: Details of the flight as a dictionary.
+        """
         today = dt.datetime.today()
         trow = (today + dt.timedelta(days=1)).strftime("%d/%m/%Y")
         six_months = (today + dt.timedelta(days=180)).strftime("%d/%m/%Y")
