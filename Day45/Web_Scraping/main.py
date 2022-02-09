@@ -1,35 +1,28 @@
-# import lxml
+import requests
 from bs4 import BeautifulSoup
 
 
-with open('Day45/Web_Scraping/website.html') as file:
-    contents = file.read()
+with requests.Session() as session:
+    response = session.get('https://news.ycombinator.com/news')
 
-soup = BeautifulSoup(contents, 'html.parser')
+yx_web_page = response.text
 
-# print(soup.title)
-# print(soup.title.string)
+soup = BeautifulSoup(yx_web_page, 'html.parser')
+articles = soup.find_all(name='a', class_='titlelink')
+article_texts = []
+article_links = []
 
-# print(soup.prettify())
+for article_tag in articles:
+    text = article_tag.getText()
+    article_texts.append(text)
+    link = article_tag.get('href')
+    article_links.append(link)
 
-# print(soup.p)
+article_upvotes = [int(score.getText().split()[0]) for score in soup.find_all(name='span', class_='score')]
 
-all_anchor_tags = soup.find_all(name='a')
-# print(all_anchor_tags)
+largest_upvote = max(article_upvotes)
+index = article_upvotes.index(largest_upvote)
 
-for tag in all_anchor_tags:
-    break
-    print(tag.getText())
-    print(tag.get('href'))
-
-heading = soup.find(name='h1', id='heading')
-# print(heading)
-
-section_heading = soup.find(name='h3', class_='heading')
-# print(section_heading.get('class'))
-
-name = soup.select_one(selector='#name')
-# print(name)
-
-headings = soup.select(selector='.heading')
-# print(headings)
+print(article_texts[index])
+print(article_links[index])
+print(article_upvotes[index])
