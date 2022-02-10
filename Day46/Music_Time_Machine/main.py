@@ -29,6 +29,18 @@ def format_text(text: BeautifulSoup) -> str:
     return text.getText().strip('\n')
 
 
+def find_song(query: str) -> dict:
+    """Searches for a song on Spotify based on the passed in query.
+
+    Args:
+        query (str): Spotify query.
+
+    Returns:
+        dict: Found song details.
+    """
+    return spotify_client.search(q=query, limit=1)
+
+
 # Initialization
 pp = pprint.PrettyPrinter(indent=4)
 date = input('What year would you like to travel? YYYY-MM-DD: ')
@@ -65,11 +77,26 @@ spotify_uid = spotify_client.current_user()['id']
 # Collect the tracks from Spotify
 new_playlist = []
 for song in songs:
-    # Check if there's an exact match with the artist / song title
-    response = spotify_client.search(q=f'track:{song.title} artist:{song.artist}', limit=1)
-    # Use the specified year instead of the artist if no match
-    if len(response['tracks']['items']) == 0:
-        response = spotify_client.search(q=f'track:{song.title} year:{date.split("-")[0]}', limit=1)
+    query_attempts = 0
+    while query_attempts < 3:
+        query_attempts += 1
+
+        if query_attempts == 1:
+            # Check if there's a match with the artist and song title
+            q = f'track:{song.title} artist:{song.artist}'
+        elif query_attempts == 2:
+            # Check if there's a match with the year and song title
+            q = f'track:{song.title} year:{date.split("-")[0]}'
+        else:
+            # Check if there's a match with the song title
+            q = f'track:{song.title}'
+
+        response = find_song(query=q)
+
+        # Break if there's a match for the query
+        if len(response['tracks']['items']) != 0:
+            break
+
     # Append the track to the playlist only if song can be found on Spotify
     try:
         track_id = response['tracks']['items'][0]['id']
