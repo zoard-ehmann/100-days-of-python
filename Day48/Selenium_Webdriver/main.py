@@ -32,5 +32,5 @@ driver.get(PY_URL)
 # bug_link = driver.find_element(By.XPATH, '/html/body/div/footer/div[2]/div/ul/li[3]/a')
 # print(bug_link.text)
 
-driver.close()
+#driver.close()
 driver.quit()
