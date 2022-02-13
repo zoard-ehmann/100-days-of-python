@@ -25,7 +25,7 @@ def runtime():
 def check_store():
     money = int(driver.find_element(By.ID, 'money').text)
     addons = driver.find_elements(By.CSS_SELECTOR, '#store div b')
-    addons = addons[:0:-1]
+    addons = addons[::-1]
     for add in addons:
         try:
             if money > int(add.text.split('-')[1].replace(',', '')):
