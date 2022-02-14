@@ -1,8 +1,10 @@
+# Global
 /env
 **/__pycache__
 **/.env
 **/.cache
 **/*.log
 
+# Project specific
 **/Password_Manager/.key
 **/Password_Manager/data.json
