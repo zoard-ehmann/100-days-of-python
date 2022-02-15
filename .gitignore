@@ -1,5 +1,6 @@
 # Global
 /env
+/.wdm
 **/__pycache__
 **/.env
 **/.cache

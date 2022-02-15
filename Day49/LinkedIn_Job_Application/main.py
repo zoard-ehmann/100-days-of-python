@@ -15,7 +15,7 @@ LINKEDIN_PASSWORD = os.getenv('LINKEDIN_PASSWORD')
 URL = 'https://www.linkedin.com/jobs/search?keywords=Python&location=Hungary&locationId=&geoId=100288700&f_TPR=&f_WT=2&position=1&pageNum=0'
 
 
-driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager().install(), log_path='Day49/LinkedIn_Job_Application/geckodriver.log'))
+driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
 driver.get(URL)
 
 cta_button = driver.find_element(By.LINK_TEXT, 'Sign in')

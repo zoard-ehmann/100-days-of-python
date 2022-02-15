@@ -10,7 +10,7 @@ PY_URL = 'https://python.org'
 
 
 pp = pprint.PrettyPrinter()
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install(), log_path='Day48/Python_Upcoming_Events/geckodriver.log'))
+driver = webdriver.Firefox(service=Service(GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
 
 driver.get(PY_URL)
 

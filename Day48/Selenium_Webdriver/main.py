@@ -8,7 +8,7 @@ AZ_URL = 'https://www.amazon.com/Wacom-Cintiq-Pro-Creative-Display/dp/B07BDDYK99
 PY_URL = 'https://python.org'
 
 
-driver = webdriver.Firefox(service=Service(GeckoDriverManager().install(), log_path='Day48/Selenium_Webdriver/geckodriver.log'))
+driver = webdriver.Firefox(service=Service(GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
 
 # Get element by ID
 # driver.get(AZ_URL)

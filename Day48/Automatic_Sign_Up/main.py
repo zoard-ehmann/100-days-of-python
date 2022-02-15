@@ -8,7 +8,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 URL = 'http://secure-retreat-92358.herokuapp.com/'
 
 
-driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager().install(), log_path='Day48/Automatic_Sign_Up/geckodriver.log'))
+driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
 driver.get(URL)
 
 first_name = driver.find_element(By.NAME, 'fName')

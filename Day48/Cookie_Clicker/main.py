@@ -35,7 +35,7 @@ def check_store():
             pass
 
 
-driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager().install(), log_path='Day48/Cookie_Clicker/geckodriver.log'))
+driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
 driver.get(URL)
 
 cookie = driver.find_element(By.ID, 'cookie')
