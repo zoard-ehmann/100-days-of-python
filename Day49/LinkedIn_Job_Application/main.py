@@ -52,3 +52,5 @@ for job in job_list:
         driver.find_element(By.XPATH, '//span[text()="Discard"]').click()
 
         if save_job and not already_saved(): driver.find_element(By.XPATH, '//span[text()="Save"]').click()
+
+driver.quit()
