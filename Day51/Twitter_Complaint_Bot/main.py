@@ -1,32 +1,10 @@
-import os
-import time
-
-from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.firefox import GeckoDriverManager
+from internet_speed_twitter_bot import InternetSpeedTwitterBot
 
 
-load_dotenv()
+twitter_bot = InternetSpeedTwitterBot()
+internet_speed = twitter_bot.get_internet_speed()
 
-TWITTER_USERNAME = os.getenv('TWITTER_UN')
-TWITTER_PASSWORD = os.getenv('TWITTER_PW')
+if internet_speed['up'] < twitter_bot.guaranteed_up or internet_speed['down'] < twitter_bot.guaranteed_down:
+    twitter_bot.tweet_at_provider(internet_speed)
 
-driver = webdriver.Firefox(service=Service(executable_path=GeckoDriverManager(path='.wdm').install(), log_path='.wdm/geckodriver.log'))
-wait = WebDriverWait(driver=driver, timeout=15)
-
-driver.get('https://twitter.com')
-
-driver.switch_to.new_window('tab')
-driver.get('https://digi.hu/ajanlat/internet/lan')
-
-wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'close')))
-driver.find_element(By.CLASS_NAME, 'close').click()
-
-guaranteed_bw = driver.find_element(By.CLASS_NAME, 'field-name-field-garantalt-savszelesseg').text.split()[-2]
-guaranteed_down = guaranteed_bw.split('/')[0]
-guaranteed_up = guaranteed_bw.split('/')[1]
+twitter_bot.close_browser()
