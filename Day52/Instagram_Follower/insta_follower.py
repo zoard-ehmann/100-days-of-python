@@ -4,8 +4,10 @@ from selenium import webdriver
 from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 from webdriver_manager.firefox import GeckoDriverManager
 
 
@@ -41,6 +43,11 @@ class InstaFollower():
         """
         self.wait.until(EC.element_to_be_clickable((By.XPATH, '//button[text()="Not Now"]'))).click()
 
+    def end_session(self):
+        """Quits from the browser.
+        """
+        self.driver.quit()
+
     def login(self, username: str, password: str):
         """Logs in to Instagram with the specified username and password combination.
 
@@ -68,12 +75,15 @@ class InstaFollower():
         self.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[text()="Search"]'))).click()
         self.driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Search"]').send_keys(account)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]'))).click()
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[3]'))).click() #FIXME: 3 -> 2
 
     def follow(self):
-        time.sleep(3)
-        window = '/html/body/div[6]/div/div/div/div[2]'
-        followers = '/html/body/div[6]/div/div/div/div[2]/ul/div/li'
-        followers = self.driver.find_elements(By.XPATH, '/html/body/div[6]/div/div/div/div[2]/ul/div/li')
-        for follower in followers:
-            print(follower.text)
+        time.sleep(5)
+        window = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/div/div/div[3]') #FIXME: 3 -> 2
+        while True:
+            try:
+                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div/div/div/div[3]/ul/div/li//div[text()="Follow"]'))).click() #FIXME: 3 -> 2
+                window.send_keys(Keys.ARROW_DOWN)
+                time.sleep(3)
+            except TimeoutException:
+                break
