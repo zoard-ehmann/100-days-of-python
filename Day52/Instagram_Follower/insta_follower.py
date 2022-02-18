@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.firefox import GeckoDriverManager
 
 
@@ -74,16 +74,24 @@ class InstaFollower():
         """
         self.wait.until(EC.element_to_be_clickable((By.XPATH, '//span[text()="Search"]'))).click()
         self.driver.find_element(By.CSS_SELECTOR, 'input[placeholder="Search"]').send_keys(account)
+        time.sleep(1)
         self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]'))).click()
-        self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[3]'))).click() #FIXME: 3 -> 2
+        self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[1]/section/main/div/header/section/ul/li[2]'))).click()
 
     def follow(self):
+        """Follows all the followers of the target account.
+        """
         time.sleep(5)
-        window = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/div/div/div[3]') #FIXME: 3 -> 2
-        while True:
+        window = self.driver.find_element(By.XPATH, '/html/body/div[6]/div/div/div/div[2]')
+        accounts = self.driver.find_elements(By.XPATH, '/html/body/div[6]/div/div/div/div[2]/ul/div/li')
+
+        for account in accounts:
             try:
-                self.wait.until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[6]/div/div/div/div[3]/ul/div/li//div[text()="Follow"]'))).click() #FIXME: 3 -> 2
-                window.send_keys(Keys.ARROW_DOWN)
-                time.sleep(3)
-            except TimeoutException:
-                break
+                button = account.find_element(By.CSS_SELECTOR, 'button div')
+                if button.text == 'Follow':
+                    button.click()
+            except NoSuchElementException:
+                pass
+            
+            time.sleep(5)
+            window.send_keys(Keys.ARROW_DOWN)
