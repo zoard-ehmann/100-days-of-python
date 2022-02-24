@@ -1,0 +1,215 @@
+/* General styles */
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem
+}
+
+.my-box {
+  padding: 0 15%;
+}
+
+.my-main-col {
+  background-color: #ff4c68;
+  color: white;
+}
+
+.my-alt-col {
+  background-color: #ef8172;
+  color: white;
+}
+
+.my-white {
+  background-color: white;
+  color: black;
+}
+
+.my-btn {
+  font-weight: 300;
+  padding: 10px 20px;
+}
+
+/* Header */
+
+#my-nav .navbar-brand {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 2.5rem;
+}
+
+#my-nav .nav-link {
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+/* Hero section */
+
+#my-hero {
+  padding-bottom: 150px;
+}
+
+#my-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 5.25rem;
+}
+
+.my-hero-img {
+  position: relative;
+}
+
+#my-hero img {
+  width: 60%;
+  position: absolute;
+  z-index: 0;
+  transform: rotate(25deg);
+}
+
+/* Marketing section */
+
+#my-marketing {
+  text-align: center;
+  padding-bottom: 150px;
+  padding-top: 150px;
+  position: relative;
+  z-index: 1;
+}
+
+#my-marketing i {
+  color: #ef8172;
+}
+
+#my-marketing i:hover {
+  color: #ff4c68;
+  transition: 0.5s;
+}
+
+#my-marketing h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+#my-marketing p {
+  color: #8f8f8f;
+  font-weight: 300;
+}
+
+/* Testimonials section */
+
+#my-testimonials {
+  padding-bottom: 150px;
+  padding-top: 150px;
+}
+
+.my-testimonial-content {
+  font-size: 3rem;
+  text-align: center;
+}
+
+.my-testimonial-author {
+  text-align: center;
+  font-weight: 300;
+}
+
+.my-testimonial-author img {
+  border-radius: 100%;
+  display: inline-block;
+  max-width: 10%;
+}
+
+.my-testimonial-author p {
+  display: inline-block;
+  font-size: 1rem;
+}
+
+/* Partners section */
+
+#my-partners {
+  text-align: center;
+  padding-bottom: 150px;
+}
+
+#my-partners img {
+  margin: 0 25px;
+  max-width: 15%;
+}
+
+/* Pricing section */
+
+#my-pricing {
+  padding-bottom: 150px;
+  padding-top: 150px;
+}
+
+.my-pricing-title {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.my-pricing-title h2 {
+  font-size: 3rem;
+}
+
+.my-pricing-title p {
+  color: #8f8f8f;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+#my-pricing h4 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+#my-pricing li {
+  color: #8f8f8f;
+  font-weight: 300;
+}
+
+/* CTA section */
+
+#my-cta {
+  padding-bottom: 150px;
+  padding-top: 150px;
+  text-align: center;
+}
+
+#my-cta h2 {
+  font-size: 3.5rem;
+  font-weight: 700;
+}
+
+/* Footer */
+
+#my-footer {
+  padding-bottom: 150px;
+  padding-top: 150px;
+  text-align: center;
+}
+
+#my-footer a {
+  color: black;
+}
+
+#my-footer a:hover {
+  color: #ff4c68;
+  transition: 0.5s;
+}
+
+#my-footer p {
+  color: #8f8f8f;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+@media (max-width: 1250px) {
+
+  #my-hero img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    transform: rotate(0);
+  }
+
+}
