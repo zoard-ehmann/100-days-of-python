@@ -59,10 +59,11 @@ body {
 }
 
 #my-hero img {
-  width: 60%;
   position: absolute;
-  z-index: 0;
+  right: 30%;
   transform: rotate(25deg);
+  width: 60%;
+  z-index: 0;
 }
 
 /* Marketing section */
@@ -202,13 +203,14 @@ body {
   font-weight: 300;
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 991px) {
 
   #my-hero img {
     display: block;
     margin-left: auto;
     margin-right: auto;
     position: relative;
+    right: auto;
     transform: rotate(0);
   }
 
