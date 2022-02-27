@@ -8,6 +8,10 @@ body {
   text-align: center;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 900;
+}
+
 .my-box {
   padding: 0 15%;
 }
@@ -37,7 +41,6 @@ body {
 
 .my-text-large {
   font-size: 3.5rem;
-  font-weight: 900;
   line-height: 1.5;
 }
 
@@ -87,7 +90,6 @@ body {
 
 #my-marketing h2 {
   font-size: 2rem;
-  font-weight: 900;
 }
 
 /* Testimonials section */
@@ -123,9 +125,12 @@ body {
   margin-bottom: 100px;
 }
 
+#my-pricing h3 {
+  font-weight: 500;
+}
+
 #my-pricing h4 {
   font-size: 2.5rem;
-  font-weight: 900;
 }
 
 /* Footer */
