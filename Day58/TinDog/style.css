@@ -1,9 +1,11 @@
 /* General styles */
 
 body {
+  color: white;
   font-family: 'Montserrat', sans-serif;
-  font-weight: 500;
-  font-size: 1.25rem
+  font-weight: 300;
+  font-size: 1.25rem;
+  text-align: center;
 }
 
 .my-box {
@@ -12,12 +14,10 @@ body {
 
 .my-main-col {
   background-color: #ff4c68;
-  color: white;
 }
 
 .my-alt-col {
   background-color: #ef8172;
-  color: white;
 }
 
 .my-white {
@@ -26,8 +26,23 @@ body {
 }
 
 .my-btn {
-  font-weight: 300;
+  margin: 0 10px 20px 0;
   padding: 10px 20px;
+}
+
+.my-divider {
+  padding-bottom: 150px;
+  padding-top: 150px;
+}
+
+.my-text-large {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1.5;
+}
+
+.my-text-muted {
+  color: #8f8f8f;
 }
 
 /* Header */
@@ -37,21 +52,10 @@ body {
   font-size: 2.5rem;
 }
 
-#my-nav .nav-link {
-  font-size: 1.25rem;
-  font-weight: 300;
-}
-
 /* Hero section */
 
 #my-hero {
   padding-bottom: 150px;
-}
-
-#my-hero h1 {
-  font-size: 3.5rem;
-  font-weight: 900;
-  line-height: 5.25rem;
 }
 
 .my-hero-img {
@@ -63,15 +67,11 @@ body {
   right: 30%;
   transform: rotate(25deg);
   width: 60%;
-  z-index: 0;
 }
 
 /* Marketing section */
 
 #my-marketing {
-  text-align: center;
-  padding-bottom: 150px;
-  padding-top: 150px;
   position: relative;
   z-index: 1;
 }
@@ -86,107 +86,49 @@ body {
 }
 
 #my-marketing h2 {
-  font-size: 1.5rem;
-  font-weight: 500;
-}
-
-#my-marketing p {
-  color: #8f8f8f;
-  font-weight: 300;
+  font-size: 2rem;
+  font-weight: 900;
 }
 
 /* Testimonials section */
 
-#my-testimonials {
-  padding-bottom: 150px;
-  padding-top: 150px;
-}
-
 .my-testimonial-content {
   font-size: 3rem;
-  text-align: center;
-}
-
-.my-testimonial-author {
-  text-align: center;
-  font-weight: 300;
+  font-weight: 500;
 }
 
 .my-testimonial-author img {
   border-radius: 100%;
-  display: inline-block;
   max-width: 10%;
 }
 
 .my-testimonial-author p {
   display: inline-block;
-  font-size: 1rem;
 }
 
 /* Partners section */
 
 #my-partners {
-  text-align: center;
   padding-bottom: 150px;
 }
 
 #my-partners img {
-  margin: 0 25px;
+  margin: 0 20px;
   max-width: 15%;
 }
 
 /* Pricing section */
 
-#my-pricing {
-  padding-bottom: 150px;
-  padding-top: 150px;
-}
-
 .my-pricing-title {
-  text-align: center;
   margin-bottom: 100px;
 }
 
-.my-pricing-title h2 {
-  font-size: 3rem;
-}
-
-.my-pricing-title p {
-  color: #8f8f8f;
-  font-size: 1.25rem;
-  font-weight: 300;
-}
-
 #my-pricing h4 {
-  font-size: 3rem;
-  font-weight: 900;
-}
-
-#my-pricing li {
-  color: #8f8f8f;
-  font-weight: 300;
-}
-
-/* CTA section */
-
-#my-cta {
-  padding-bottom: 150px;
-  padding-top: 150px;
-  text-align: center;
-}
-
-#my-cta h2 {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 900;
 }
 
 /* Footer */
-
-#my-footer {
-  padding-bottom: 150px;
-  padding-top: 150px;
-  text-align: center;
-}
 
 #my-footer a {
   color: black;
@@ -197,20 +139,10 @@ body {
   transition: 0.5s;
 }
 
-#my-footer p {
-  color: #8f8f8f;
-  font-size: 1rem;
-  font-weight: 300;
-}
-
 @media (max-width: 991px) {
 
   #my-hero img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
-    right: auto;
+    position: static;
     transform: rotate(0);
   }
 
