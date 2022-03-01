@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template
 from dotenv import load_dotenv
 from login_form import LoginForm
+from flask_bootstrap import Bootstrap
 
 
 load_dotenv()
@@ -28,4 +29,5 @@ def login():
 
 
 if __name__ == '__main__':
+    Bootstrap(app)
     app.run(debug=True)

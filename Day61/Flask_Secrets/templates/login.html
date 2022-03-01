@@ -1,11 +1,6 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-	<title>Login</title>
-</head>
-
-<body>
+{% extends 'bootstrap/base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
 	<div class="container">
 		<h1>Login</h1>
 		<form action="{{ url_for('login') }}" method="POST" autocomplete="off" novalidate>
@@ -25,6 +20,4 @@
 			{{ form.login_button }}
 		</form>
 	</div>
-</body>
-
-</html>
+{% endblock %}
