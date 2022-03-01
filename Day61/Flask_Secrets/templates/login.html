@@ -1,9 +1,15 @@
 {% extends 'bootstrap/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block title %}Login{% endblock %}
 {% block content %}
 	<div class="container">
 		<h1>Login</h1>
-		<form action="{{ url_for('login') }}" method="POST" autocomplete="off" novalidate>
+
+		<!-- INFO: Using Flask-Bootstrap to build form -->
+		{{ wtf.quick_form(form, novalidate=True) }}
+
+		<!-- INFO: Build form with Flask WTF / WTForms -->
+		<!-- <form action="{{ url_for('login') }}" method="POST" autocomplete="off" novalidate>
 			{{ form.csrf_token }}
 			<p>
 				{{ form.email.label }} <br> {{ form.email(size=30) }}
@@ -18,6 +24,7 @@
 				{% endfor %}
 			</p>
 			{{ form.login_button }}
-		</form>
+		</form> -->
+
 	</div>
 {% endblock %}
