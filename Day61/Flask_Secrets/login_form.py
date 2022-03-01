@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import Email, Length
 
 
 class LoginForm(FlaskForm):
-    username = StringField(label='Email', validators=[DataRequired()])
-    password = PasswordField(label='Password', validators=[DataRequired()])
+    email = StringField(label='Email', validators=[Email()])
+    password = PasswordField(label='Password', validators=[Length(min=8)])
     login_button = SubmitField(label='Log In')

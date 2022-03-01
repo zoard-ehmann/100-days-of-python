@@ -16,9 +16,14 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == os.getenv('ADMIN_EMAIL') and form.password.data == os.getenv('ADMIN_PW'):
+            return render_template('success.html')
+        return render_template('denied.html')
+    
     return render_template('login.html', form=form)
 
 
