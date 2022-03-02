@@ -24,7 +24,7 @@ class CafeForm(FlaskForm):
 
 
 # all Flask routes below
-@app.route("/")
+@app.route('/')
 def home():
     return render_template("index.html")
 
@@ -33,7 +33,7 @@ def home():
 def add_cafe():
     form = CafeForm()
     if form.validate_on_submit():
-        print("True")
+        print('True')
     # Exercise:
     # Make the form write a new row into cafe-data.csv
     # with   if form.validate_on_submit()
