@@ -28,7 +28,7 @@
         <tbody>
           <tr>
             {% for col in row: %}
-            {% if row.index(col) == 1: %}
+            {% if col.startswith('http'): %}
             <td>
               <a href="{{ col }}">Maps Link</a>
             </td>
