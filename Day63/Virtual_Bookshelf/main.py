@@ -45,6 +45,7 @@ def edit(id):
         book.rating = request.form['new_rating']
         db.session.commit()
         return redirect(url_for('home'))
+        
     return render_template('edit.html', book=book)
 
 
