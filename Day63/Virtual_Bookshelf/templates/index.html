@@ -11,7 +11,10 @@
     {% if library|length > 0: %}
     <ul>
         {% for book in library: %}
-        <li>{{ [[book.title, book.author, book.rating]|join(' - '), '10']|join('/') }}</li>
+        <li>
+            {{ [[book.title, book.author, book.rating]|join(' - '), '10']|join('/') }}
+            <a href="{{ url_for('edit', id=book.id) }}">Edit Rating</a>
+        </li>
         {% endfor %}
     </ul>
     {% else: %}
