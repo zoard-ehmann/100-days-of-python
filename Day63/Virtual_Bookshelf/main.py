@@ -37,7 +37,7 @@ def add():
     return render_template('add.html')
 
 
-@app.route('/edit/<int:id>', methods=['POST', 'GET'])
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     book = Book.query.get(id)
 
@@ -46,6 +46,14 @@ def edit(id):
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('edit.html', book=book)
+
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    book = Book.query.get(id)
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for('home'))
 
 
 if __name__ == "__main__":

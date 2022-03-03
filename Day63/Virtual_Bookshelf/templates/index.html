@@ -12,6 +12,7 @@
     <ul>
         {% for book in library: %}
         <li>
+            <a href="{{ url_for('delete', id=book.id) }}">Delete</a>
             {{ [[book.title, book.author, book.rating]|join(' - '), '10']|join('/') }}
             <a href="{{ url_for('edit', id=book.id) }}">Edit Rating</a>
         </li>
