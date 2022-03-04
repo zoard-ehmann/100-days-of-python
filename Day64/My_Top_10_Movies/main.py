@@ -1,4 +1,5 @@
 import os
+from sqlite3 import IntegrityError
 
 import requests
 from flask import Flask, render_template, redirect, url_for, request
@@ -25,8 +26,8 @@ class Movie(db.Model):
     title = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(250), nullable=False)
-    rating = db.Column(db.Float)
-    ranking = db.Column(db.Integer, unique=True)
+    rating = db.Column(db.Float, unique=True)
+    ranking = db.Column(db.Integer)
     review = db.Column(db.String(250))
     img_url = db.Column(db.String, nullable=False, unique=True)
 
@@ -62,6 +63,12 @@ def api_request(api_endpoint: str, api_params: dict = {'api_key': os.getenv('TMD
 @app.route('/')
 def home():
     all_movies = Movie.query.all()
+    ratings = [movie.rating for movie in all_movies]
+    ratings.sort(reverse=True)
+    for movie_rating in ratings:
+        movie = Movie.query.filter_by(rating=movie_rating).first()
+        movie.ranking = ratings.index(movie_rating) + 1
+        db.session.commit()
     return render_template('index.html', all_movies=all_movies)
 
 
