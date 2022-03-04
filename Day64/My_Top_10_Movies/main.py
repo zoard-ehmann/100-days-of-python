@@ -42,6 +42,23 @@ class AddForm(FlaskForm):
     submit = SubmitField(label='Add Movie')
 
 
+def api_request(api_endpoint: str, api_params: dict = {'api_key': os.getenv('TMDB_API_KEY')}) -> dict:
+    """Sends a GET request to the passed in TMDB API endpoint, authenticates and returns the JSON repsonse.
+
+    Args:
+        api_endpoint (str): TMDB API URL.
+        api_params (dict, optional): TMDB API request parameters. Defaults to {'api_key': os.getenv('TMDB_API_KEY')}.
+
+    Returns:
+        dict: TMDB API response in JSON format.
+    """
+    with requests.Session() as session:
+        api_params['api_key'] = os.getenv('TMDB_API_KEY')
+        response = session.get(url=api_endpoint, params=api_params)
+        response.raise_for_status()
+        return response.json()
+
+
 @app.route('/')
 def home():
     all_movies = Movie.query.all()
@@ -72,34 +89,25 @@ def delete():
 def add():
     add_form = AddForm()
     if add_form.validate_on_submit():
-        with requests.Session() as session:
-            response = session.get(url='https://api.themoviedb.org/3/search/movie', params={
-                'api_key': os.getenv('TMDB_API_KEY'),
-                'query': add_form.title.data
-            })
-            response.raise_for_status()
-            movie_list = response.json()['results']
+        movie_list = api_request(api_endpoint='https://api.themoviedb.org/3/search/movie', api_params={
+            'query': add_form.title.data
+        })
         
-        return render_template('select.html', movie_list=movie_list)
+        return render_template('select.html', movie_list=movie_list['results'])
 
     try:
         tmdb_id = request.args['tmdb_id']
-        with requests.Session() as session:
-            response = session.get(url=f'https://api.themoviedb.org/3/movie/{tmdb_id}', params={
-                'api_key': os.getenv('TMDB_API_KEY')
-            })
-            response.raise_for_status()
-            movie = response.json()
-            new_movie = Movie(
-                id=tmdb_id,
-                title=movie['original_title'],
-                year=movie['release_date'].split('-')[0],
-                description=movie['overview'],
-                img_url=f'https://image.tmdb.org/t/p/original/{movie["backdrop_path"]}'
-            )
-            db.session.add(new_movie)
-            db.session.commit()
-        
+        movie = api_request(api_endpoint=f'https://api.themoviedb.org/3/movie/{tmdb_id}')
+
+        new_movie = Movie(
+            id=tmdb_id,
+            title=movie['original_title'],
+            year=movie['release_date'].split('-')[0],
+            description=movie['overview'],
+            img_url=f'https://image.tmdb.org/t/p/original/{movie["backdrop_path"]}'
+        )
+        db.session.add(new_movie)
+        db.session.commit()
         return redirect(url_for('edit', id=tmdb_id))
 
     except BadRequestKeyError:
