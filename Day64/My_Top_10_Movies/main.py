@@ -5,7 +5,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 from dotenv import load_dotenv
 
@@ -30,10 +30,33 @@ class Movie(db.Model):
     img_url = db.Column(db.String, nullable=False, unique=True)
 
 
+class EditForm(FlaskForm):
+    rating = StringField(label='Your Rating Out of 10', validators=[DataRequired()])
+    review = TextAreaField(label='Your Review', validators=[DataRequired()])
+    submit = SubmitField(label='Done')
+
+
 @app.route('/')
 def home():
     all_movies = Movie.query.all()
     return render_template('index.html', all_movies=all_movies)
+
+
+@app.route('/edit', methods=['GET', 'POST'])
+def edit():
+    movie = Movie.query.get(request.args['id'])
+    edit_form = EditForm()
+    if edit_form.validate_on_submit():
+        movie.rating = edit_form.rating.data
+        movie.review = edit_form.review.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('edit.html', movie=movie, form=edit_form)
+
+
+@app.route('/delete')
+def delete():
+    pass
 
 
 if __name__ == '__main__':
