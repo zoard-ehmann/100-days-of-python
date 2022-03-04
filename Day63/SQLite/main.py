@@ -1,7 +1,7 @@
 import sqlite3
 
 
-db = sqlite3.connect(database='Day63/SQLite/books-collection.db')
+db = sqlite3.connect(database='sqlite.db')
 cursor = db.cursor()
 
 # INFO: Create table
