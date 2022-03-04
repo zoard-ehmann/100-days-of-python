@@ -26,7 +26,7 @@ class Movie(db.Model):
     title = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(250), nullable=False)
-    rating = db.Column(db.Float, unique=True)
+    rating = db.Column(db.Float)
     ranking = db.Column(db.Integer)
     review = db.Column(db.String(250))
     img_url = db.Column(db.String, nullable=False, unique=True)
@@ -62,10 +62,10 @@ def api_request(api_endpoint: str, api_params: dict = {'api_key': os.getenv('TMD
 
 @app.route('/')
 def home():
-    all_movies = Movie.query.order_by('rating').all()
+    all_movies = Movie.query.order_by(Movie.rating).all()
     for movie in all_movies:
         movie.ranking = len(all_movies) - all_movies.index(movie)
-        db.session.commit()
+    db.session.commit()
     return render_template('index.html', all_movies=all_movies)
 
 
