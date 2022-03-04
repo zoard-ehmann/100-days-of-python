@@ -62,12 +62,9 @@ def api_request(api_endpoint: str, api_params: dict = {'api_key': os.getenv('TMD
 
 @app.route('/')
 def home():
-    all_movies = Movie.query.all()
-    ratings = [movie.rating for movie in all_movies]
-    ratings.sort(reverse=True)
-    for movie_rating in ratings:
-        movie = Movie.query.filter_by(rating=movie_rating).first()
-        movie.ranking = ratings.index(movie_rating) + 1
+    all_movies = Movie.query.order_by('rating').all()
+    for movie in all_movies:
+        movie.ranking = len(all_movies) - all_movies.index(movie)
         db.session.commit()
     return render_template('index.html', all_movies=all_movies)
 
