@@ -56,7 +56,10 @@ def edit():
 
 @app.route('/delete')
 def delete():
-    pass
+    movie = Movie.query.get(request.args['id'])
+    db.session.delete(movie)
+    db.session.commit()
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
