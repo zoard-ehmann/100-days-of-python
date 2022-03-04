@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 from dotenv import load_dotenv
+from werkzeug.exceptions import BadRequestKeyError
 
 
 load_dotenv()
@@ -24,9 +25,9 @@ class Movie(db.Model):
     title = db.Column(db.String, nullable=False)
     year = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(250), nullable=False)
-    rating = db.Column(db.Float, nullable=False)
-    ranking = db.Column(db.Integer, nullable=False, unique=True)
-    review = db.Column(db.String(250), nullable=False)
+    rating = db.Column(db.Float)
+    ranking = db.Column(db.Integer, unique=True)
+    review = db.Column(db.String(250))
     img_url = db.Column(db.String, nullable=False, unique=True)
 
 
@@ -34,6 +35,11 @@ class EditForm(FlaskForm):
     rating = StringField(label='Your Rating Out of 10', validators=[DataRequired()])
     review = TextAreaField(label='Your Review', validators=[DataRequired()])
     submit = SubmitField(label='Done')
+
+
+class AddForm(FlaskForm):
+    title = StringField(label='Movie Title', validators=[DataRequired()])
+    submit = SubmitField(label='Add Movie')
 
 
 @app.route('/')
@@ -62,17 +68,44 @@ def delete():
     return redirect(url_for('home'))
 
 
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    add_form = AddForm()
+    if add_form.validate_on_submit():
+        with requests.Session() as session:
+            response = session.get(url='https://api.themoviedb.org/3/search/movie', params={
+                'api_key': os.getenv('TMDB_API_KEY'),
+                'query': add_form.title.data
+            })
+            response.raise_for_status()
+            movie_list = response.json()['results']
+        
+        return render_template('select.html', movie_list=movie_list)
+
+    try:
+        tmdb_id = request.args['tmdb_id']
+        with requests.Session() as session:
+            response = session.get(url=f'https://api.themoviedb.org/3/movie/{tmdb_id}', params={
+                'api_key': os.getenv('TMDB_API_KEY')
+            })
+            response.raise_for_status()
+            movie = response.json()
+            new_movie = Movie(
+                id=tmdb_id,
+                title=movie['original_title'],
+                year=movie['release_date'].split('-')[0],
+                description=movie['overview'],
+                img_url=f'https://image.tmdb.org/t/p/original/{movie["backdrop_path"]}'
+            )
+            db.session.add(new_movie)
+            db.session.commit()
+        
+        return redirect(url_for('edit', id=tmdb_id))
+
+    except BadRequestKeyError:
+        return render_template('add.html', add_form=add_form)
+
+
 if __name__ == '__main__':
-    # db.create_all()
-    # new_movie = Movie(
-    #     title="Phone Booth",
-    #     year=2002,
-    #     description="Publicist Stuart Shepard finds himself trapped in a phone booth, pinned down by an extortionist's sniper rifle. Unable to leave or receive outside help, Stuart's negotiation with the caller leads to a jaw-dropping climax.",
-    #     rating=7.3,
-    #     ranking=10,
-    #     review="My favourite character was the caller.",
-    #     img_url="https://image.tmdb.org/t/p/w500/tjrX2oWRCM3Tvarz38zlZM7Uc10.jpg"
-    # )
-    # db.session.add(new_movie)
-    # db.session.commit()
+    db.create_all()
     app.run(debug=True)
