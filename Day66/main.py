@@ -39,14 +39,14 @@ def home():
 def get_random_cafe():
     if request.method == 'GET':
         cafe = random.choice(db.session.query(Cafe).all())
-        return jsonify(cafe=Cafe.to_dict(cafe))
+        return jsonify(cafe=cafe.to_dict())
 
 
 @app.route('/all', methods=['GET'])
 def get_all_cafes():
     if request.method == 'GET':
         all_cafes = db.session.query(Cafe).all()
-        return jsonify(cafes=[Cafe.to_dict(cafe) for cafe in all_cafes])
+        return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
 
 
 ## HTTP GET - Read Record
