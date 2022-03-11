@@ -1,8 +1,12 @@
 import random
+import os
 
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
 
+
+load_dotenv()
 app = Flask(__name__)
 
 ##Connect to Database
@@ -87,6 +91,24 @@ def update_cafe_price(cafe_id):
     return jsonify(error={
         'Not Found': 'Sorry, a cafe with that ID was not found in the database.'
     }), 404
+
+
+@app.route('/report-closed/<cafe_id>', methods=['DELETE'])
+def delete_cafe(cafe_id):
+    if request.args.get('api_key') == os.getenv('API_KEY'):
+        cafe = db.session.query(Cafe).filter_by(id=cafe_id).first()
+        if cafe:
+            db.session.delete(cafe)
+            db.session.commit()
+            return jsonify(response={
+                'success': 'Successfully deleted the cafe.'
+            }), 200
+        return jsonify(error={
+            'Not Found': 'Sorry, a cafe with that ID was not found in the database.'
+        }), 404
+    return jsonify(error={
+        'Not Allowed': 'Sorry, that\'s not allowed. Make sure you have the correct API key.'
+    }), 403
 
 
 if __name__ == '__main__':
