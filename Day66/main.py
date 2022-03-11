@@ -1,4 +1,3 @@
-from crypt import methods
 import random
 
 from flask import Flask, jsonify, render_template, request
@@ -32,31 +31,48 @@ class Cafe(db.Model):
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
 
-@app.route('/random', methods=['GET'])
+@app.route('/random')
 def get_random_cafe():
-    if request.method == 'GET':
-        cafe = random.choice(db.session.query(Cafe).all())
-        return jsonify(cafe=cafe.to_dict())
+    cafe = random.choice(db.session.query(Cafe).all())
+    return jsonify(cafe=cafe.to_dict())
 
 
-@app.route('/all', methods=['GET'])
+@app.route('/all')
 def get_all_cafes():
-    if request.method == 'GET':
-        all_cafes = db.session.query(Cafe).all()
-        return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
+    all_cafes = db.session.query(Cafe).all()
+    return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
 
 
-@app.route('/search', methods=['GET'])
+@app.route('/search')
 def find_cafe():
-    if request.method == 'GET':
-        cafes = db.session.query(Cafe).filter_by(location=request.args.get('loc').title()).all()
-        if len(cafes) != 0: return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
-        return jsonify(error={
-            'Not Found': 'Sorry, we don\'t have a cafe at that location.'
-        })
+    cafes = db.session.query(Cafe).filter_by(location=request.args.get('loc').title()).all()
+    if len(cafes) != 0: return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
+    return jsonify(error={
+        'Not Found': 'Sorry, we don\'t have a cafe at that location.'
+    })
+
+
+@app.route('/add', methods=['POST'])
+def add_cafe():
+    db.session.add(Cafe(
+        name=request.form.get('name'),
+        map_url=request.form.get('map_url'),
+        img_url=request.form.get('img_url'),
+        location=request.form.get('location'),
+        seats=request.form.get('seats'),
+        has_toilet=bool(request.form.get('has_toilet')),
+        has_wifi=bool(request.form.get('has_wifi')),
+        has_sockets=bool(request.form.get('has_sockets')),
+        can_take_calls=bool(request.form.get('can_take_calls')),
+        coffee_price=request.form.get('coffee_price')
+    ))
+    db.session.commit()
+    return jsonify(response={
+        'success': 'Successfully added the new cafe.'
+    })
 
 
 if __name__ == '__main__':
