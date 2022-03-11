@@ -49,10 +49,10 @@ def get_all_cafes():
         return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
 
 
-@app.route('/search/<location>', methods=['GET'])
-def find_cafe(location):
+@app.route('/search', methods=['GET'])
+def find_cafe():
     if request.method == 'GET':
-        cafes = db.session.query(Cafe).filter_by(location=location.title()).all()
+        cafes = db.session.query(Cafe).filter_by(location=request.args.get('loc').title()).all()
         if len(cafes) != 0: return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
         return jsonify(error={
             'Not Found': 'Sorry, we don\'t have a cafe at that location.'
