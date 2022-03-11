@@ -29,7 +29,12 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
+        """Converts a Cafe entry into a dictionary.
+
+        Returns:
+            dict: Cafe details in a dictionary form.
+        """
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
 
 
