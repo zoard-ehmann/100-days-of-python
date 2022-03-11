@@ -37,22 +37,22 @@ def home():
 @app.route('/random')
 def get_random_cafe():
     cafe = random.choice(db.session.query(Cafe).all())
-    return jsonify(cafe=cafe.to_dict())
+    return jsonify(cafe=cafe.to_dict()), 200
 
 
 @app.route('/all')
 def get_all_cafes():
     all_cafes = db.session.query(Cafe).all()
-    return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes])
+    return jsonify(cafes=[cafe.to_dict() for cafe in all_cafes]), 200
 
 
 @app.route('/search')
 def find_cafe():
     cafes = db.session.query(Cafe).filter_by(location=request.args.get('loc').title()).all()
-    if len(cafes) != 0: return jsonify(cafes=[cafe.to_dict() for cafe in cafes])
+    if len(cafes) != 0: return jsonify(cafes=[cafe.to_dict() for cafe in cafes]), 200
     return jsonify(error={
         'Not Found': 'Sorry, we don\'t have a cafe at that location.'
-    })
+    }), 404
 
 
 @app.route('/add', methods=['POST'])
@@ -72,7 +72,21 @@ def add_cafe():
     db.session.commit()
     return jsonify(response={
         'success': 'Successfully added the new cafe.'
-    })
+    }), 200
+
+
+@app.route('/update-price/<cafe_id>', methods=['PATCH'])
+def update_cafe_price(cafe_id):
+    cafe = db.session.query(Cafe).filter_by(id=cafe_id).first()
+    if cafe:
+        cafe.coffee_price = request.args.get('new_price')
+        db.session.commit()
+        return jsonify(response={
+            'success': 'Successfully updated the price.'
+        }), 200
+    return jsonify(error={
+        'Not Found': 'Sorry, a cafe with that ID was not found in the database.'
+    }), 404
 
 
 if __name__ == '__main__':
