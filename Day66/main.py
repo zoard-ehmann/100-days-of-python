@@ -25,6 +25,9 @@ class Cafe(db.Model):
     can_take_calls = db.Column(db.Boolean, nullable=False)
     coffee_price = db.Column(db.String(250), nullable=True)
 
+    def to_dict(self):
+        return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
 
 @app.route('/')
 def home():
@@ -35,21 +38,7 @@ def home():
 def get_random_cafe():
     if request.method == 'GET':
         cafe = random.choice(db.session.query(Cafe).all())
-        return jsonify(
-            cafe={
-                'id': cafe.id,
-                'name': cafe.name,
-                'map_url': cafe.map_url,
-                'img_url': cafe.img_url,
-                'location': cafe.location,
-                'seats': cafe.seats,
-                'has_toilet': cafe.has_toilet,
-                'has_wifi': cafe.has_wifi,
-                'has_sockets': cafe.has_sockets,
-                'can_take_calls': cafe.can_take_calls,
-                'coffee_price': cafe.coffee_price
-            }
-        )
+        return jsonify(cafe=Cafe.to_dict(cafe))
 
 
 ## HTTP GET - Read Record
