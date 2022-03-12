@@ -10,10 +10,6 @@ from flask_ckeditor import CKEditor, CKEditorField
 from dotenv import load_dotenv
 
 
-## Delete this code:
-# import requests
-# posts = requests.get("https://api.npoint.io/43644ec4f0013682fc0d").json()
-
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET')
@@ -24,6 +20,7 @@ Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 ##CONFIGURE TABLE
 class BlogPost(db.Model):
@@ -38,36 +35,35 @@ class BlogPost(db.Model):
 
 ##WTForm
 class CreatePostForm(FlaskForm):
-    title = StringField("Blog Post Title", validators=[DataRequired()])
-    subtitle = StringField("Subtitle", validators=[DataRequired()])
-    author = StringField("Your Name", validators=[DataRequired()])
-    img_url = StringField("Blog Image URL", validators=[DataRequired(), URL()])
-    body = StringField("Blog Content", validators=[DataRequired()])
-    submit = SubmitField("Submit Post")
+    title = StringField('Blog Post Title', validators=[DataRequired()])
+    subtitle = StringField('Subtitle', validators=[DataRequired()])
+    author = StringField('Your Name', validators=[DataRequired()])
+    img_url = StringField('Blog Image URL', validators=[DataRequired(), URL()])
+    body = StringField('Blog Content', validators=[DataRequired()])
+    submit = SubmitField('Submit Post')
 
 
 @app.route('/')
 def get_all_posts():
-    return render_template("index.html", all_posts=posts)
+    posts = db.session.query(BlogPost).all()
+    return render_template('index.html', all_posts=posts)
 
 
-@app.route("/post/<int:index>")
+@app.route('/post/<int:index>')
 def show_post(index):
-    requested_post = None
-    for blog_post in posts:
-        if blog_post["id"] == index:
-            requested_post = blog_post
-    return render_template("post.html", post=requested_post)
+    requested_post = db.session.query(BlogPost).get(index)
+    return render_template('post.html', post=requested_post)
 
 
-@app.route("/about")
+@app.route('/about')
 def about():
-    return render_template("about.html")
+    return render_template('about.html')
 
 
-@app.route("/contact")
+@app.route('/contact')
 def contact():
-    return render_template("contact.html")
+    return render_template('contact.html')
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=5000, debug=True)
