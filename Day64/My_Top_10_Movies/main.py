@@ -15,7 +15,7 @@ from werkzeug.exceptions import BadRequestKeyError
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLITE_DB_PATH')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///movies.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 Bootstrap(app)
 db = SQLAlchemy(app)
