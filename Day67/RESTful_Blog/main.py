@@ -1,5 +1,7 @@
 import os
+from datetime import date
 
+import bleach
 from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -11,6 +13,8 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+ALLOWED_TAGS = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'p']
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET')
 ckeditor = CKEditor(app)
@@ -39,7 +43,7 @@ class CreatePostForm(FlaskForm):
     subtitle = StringField('Subtitle', validators=[DataRequired()])
     author = StringField('Your Name', validators=[DataRequired()])
     img_url = StringField('Blog Image URL', validators=[DataRequired(), URL()])
-    body = StringField('Blog Content', validators=[DataRequired()])
+    body = CKEditorField('Blog Content', validators=[DataRequired()])
     submit = SubmitField('Submit Post')
 
 
@@ -63,6 +67,23 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+
+@app.route('/new-post', methods=['GET', 'POST'])
+def make_post():
+    create_form = CreatePostForm()
+    if create_form.validate_on_submit():
+        db.session.add(BlogPost(
+            title=create_form.title.data,
+            subtitle=create_form.subtitle.data,
+            author=create_form.author.data,
+            img_url=create_form.img_url.data,
+            body=bleach.clean(create_form.body.data, tags=ALLOWED_TAGS),
+            date=date.today().strftime('%B %d, %Y')
+        ))
+        db.session.commit()
+        return redirect(url_for('get_all_posts'))
+    return render_template('make-post.html', form=create_form)
 
 
 if __name__ == '__main__':
