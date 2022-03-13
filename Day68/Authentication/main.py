@@ -27,22 +27,22 @@ class User(UserMixin, db.Model):
 
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
 
 @app.route('/register')
 def register():
-    return render_template("register.html")
+    return render_template('register.html')
 
 
 @app.route('/login')
 def login():
-    return render_template("login.html")
+    return render_template('login.html')
 
 
 @app.route('/secrets')
 def secrets():
-    return render_template("secrets.html")
+    return render_template('secrets.html')
 
 
 @app.route('/logout')
@@ -55,5 +55,5 @@ def download():
     pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
