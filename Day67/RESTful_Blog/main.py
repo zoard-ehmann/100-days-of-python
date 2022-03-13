@@ -83,7 +83,28 @@ def make_post():
         ))
         db.session.commit()
         return redirect(url_for('get_all_posts'))
-    return render_template('make-post.html', form=create_form)
+    return render_template('make-post.html', form=create_form, create=True)
+
+
+@app.route('/edit-post/<int:post_id>', methods=['GET', 'POST'])
+def edit_post(post_id):
+    post = db.session.query(BlogPost).get(post_id)
+    edit_form = CreatePostForm(
+        title=post.title,
+        subtitle=post.subtitle,
+        author=post.author,
+        img_url=post.img_url,
+        body=post.body
+    )
+    if edit_form.validate_on_submit():
+        post.title = edit_form.title.data
+        post.subtitle = edit_form.subtitle.data
+        post.author = edit_form.author.data
+        post.img_url = edit_form.img_url.data
+        post.body = bleach.clean(edit_form.body.data, tags=ALLOWED_TAGS)
+        db.session.commit()
+        return redirect(url_for('show_post', index=post_id))
+    return render_template('make-post.html', form=edit_form)
 
 
 if __name__ == '__main__':
