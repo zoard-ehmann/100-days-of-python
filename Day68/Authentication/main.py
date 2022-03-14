@@ -50,6 +50,9 @@ def register():
             password=generate_password_hash(password=request.form.get('password'), method=HASH_METHOD, salt_length=SALT_LENGTH),
             name=request.form.get('name')
         )
+        if db.session.query(User).filter_by(email=user.email).first():
+            flash('You\'ve already signed up with that email, try to login instead.')
+            return redirect(url_for('login'))
         db.session.add(user)
         db.session.commit()
         login_user(user=user)
@@ -63,10 +66,13 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         user = db.session.query(User).filter_by(email=email).first()
-        if check_password_hash(pwhash=user.password, password=password):
-            login_user(user=user)
-            return redirect(url_for('secrets'))
-        return redirect(url_for('login'))
+        if user:
+            if check_password_hash(pwhash=user.password, password=password):
+                login_user(user=user)
+                return redirect(url_for('secrets'))
+            flash('Incorrect password, please try again.')
+        else:
+            flash('Sorry, that email does not exist in our database.')
     return render_template('login.html')
 
 
