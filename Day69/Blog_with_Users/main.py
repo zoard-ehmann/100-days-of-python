@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm
+from forms import CreatePostForm, RegisterForm, LoginForm
 from flask_gravatar import Gravatar
 from dotenv import load_dotenv
 
@@ -72,23 +72,40 @@ def get_all_posts():
 def register():
     register_form = RegisterForm()
     if register_form.validate_on_submit():
-        db.session.add(User(
+        if db.session.query(User).filter_by(email=register_form.email.data).first():
+            flash('You\'ve already registered with this email address. Try to login instead.')
+            return redirect(url_for('login'))
+        user = User(
             email=register_form.email.data,
             password=generate_password_hash(password=register_form.password.data, method=HASH_METHOD, salt_length=SALT_LENGTH),
             name=register_form.name.data
-        ))
+        )
+        db.session.add(user)
         db.session.commit()
+        login_user(user=user)
         return redirect(url_for('get_all_posts'))
     return render_template('register.html', form=register_form)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    login_form = LoginForm()
+    if login_form.validate_on_submit():
+        user = db.session.query(User).filter_by(email=login_form.email.data).first()
+        if user:
+            if check_password_hash(pwhash=user.password, password=login_form.password.data):
+                login_user(user=user)
+                return redirect(url_for('get_all_posts'))
+            flash('Incorrect password. Please try again.')
+        else:
+            flash('That email doesn\'t exist. Try to register first.')
+    return render_template('login.html', form=login_form)
 
 
 @app.route('/logout')
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for('get_all_posts'))
 
 
