@@ -8,12 +8,19 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
+
+SALT_LENGTH = 8
+HASH_METHOD = 'pbkdf2:sha256'
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 
 ##CREATE TABLE IN DB
 class User(UserMixin, db.Model):
@@ -25,6 +32,11 @@ class User(UserMixin, db.Model):
 # db.create_all()
 
 
+@login_manager.user_loader
+def load_user(id):
+    return db.session.query(User).get(id)
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -33,33 +45,46 @@ def home():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        new_user = User(
+        user = User(
             email=request.form.get('email'),
-            password=generate_password_hash(password=request.form.get('password'), method='pbkdf2:sha256', salt_length=8),
+            password=generate_password_hash(password=request.form.get('password'), method=HASH_METHOD, salt_length=SALT_LENGTH),
             name=request.form.get('name')
         )
-        db.session.add(new_user)
+        db.session.add(user)
         db.session.commit()
-        return redirect(url_for('secrets', name=new_user.name))
+        login_user(user=user)
+        return redirect(url_for('secrets'))
     return render_template('register.html')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = db.session.query(User).filter_by(email=email).first()
+        if check_password_hash(pwhash=user.password, password=password):
+            login_user(user=user)
+            return redirect(url_for('secrets'))
+        return redirect(url_for('login'))
     return render_template('login.html')
 
 
 @app.route('/secrets')
+@login_required
 def secrets():
-    return render_template('secrets.html', name=request.args.get('name'))
+    return render_template('secrets.html')
 
 
 @app.route('/logout')
+@login_required
 def logout():
-    pass
+    logout_user()
+    return redirect(url_for('home'))
 
 
 @app.route('/download')
+@login_required
 def download():
     return send_from_directory(directory='static', path='files/cheat_sheet.pdf')
 
