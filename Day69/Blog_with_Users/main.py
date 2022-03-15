@@ -37,6 +37,16 @@ db = SQLAlchemy(app)
 
 
 #INFO: CONFIGURE TABLES
+class User(UserMixin, db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String, unique=True, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    posts = relationship('BlogPost')
+    comments = relationship('Comment')
+
+
 class BlogPost(db.Model):
     __tablename__ = 'blog_posts'
     id = db.Column(db.Integer, primary_key=True)
@@ -49,13 +59,12 @@ class BlogPost(db.Model):
     author = relationship('User', back_populates='posts')
 
 
-class User(UserMixin, db.Model):
-    __tablename__ = 'user'
+class Comment(db.Model):
+    __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, nullable=False)
-    name = db.Column(db.String, nullable=False)
-    posts = relationship('BlogPost')
+    text = db.Column(db.Text, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = relationship('User', back_populates='comments')
 
 
 #INFO: FUNCTIONS AND DECORATORS
