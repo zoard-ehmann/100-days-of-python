@@ -26,11 +26,18 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET')
 ckeditor = CKEditor(app)
 Bootstrap(app)
+gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    force_lower=False,
+                    use_ssl=False,
+                    base_url=None)
 
 #INFO: SET UP LOGIN MANAGER
 login_manager = LoginManager()
 login_manager.init_app(app)
-
 
 #INFO: CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
