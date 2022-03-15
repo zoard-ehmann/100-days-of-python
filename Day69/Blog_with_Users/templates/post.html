@@ -34,6 +34,7 @@
         {% endif %}
 
         {{ ckeditor.load() }}
+        {{ ckeditor.config(name='comment') }}
         {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
 
         <!-- Comments Area -->
