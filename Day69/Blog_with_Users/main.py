@@ -1,5 +1,6 @@
 import os
 
+import bleach
 from flask import Flask, render_template, redirect, request, url_for, flash, abort
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
@@ -18,6 +19,7 @@ from functools import wraps
 load_dotenv()
 HASH_METHOD = 'pbkdf2:sha256'
 SALT_LENGTH = 16
+ALLOWED_TAGS = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'p']
 
 #INFO: INITIALIZE APP
 app = Flask(__name__)
@@ -43,8 +45,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
-    posts = relationship('BlogPost')
-    comments = relationship('Comment')
+    # PARENT RELATIONSHIPS
+    posts = relationship('BlogPost', back_populates='author')
+    comments = relationship('Comment', back_populates='author')
 
 
 class BlogPost(db.Model):
@@ -55,6 +58,9 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+    # PARENT RELATIONSHIPS
+    comments = relationship('Comment', back_populates='post')
+    # CHILD RELATIONSHIPS
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = relationship('User', back_populates='posts')
 
@@ -63,8 +69,11 @@ class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)
+    # CHILD RELATIONSHIPS
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     author = relationship('User', back_populates='comments')
+    post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'))
+    post = relationship('BlogPost', back_populates='comments')
 
 
 #INFO: FUNCTIONS AND DECORATORS
@@ -154,7 +163,7 @@ def contact():
     return render_template('contact.html')
 
 
-@app.route('/new-post')
+@app.route('/new-post', methods=['GET', 'POST'])
 @admin_only
 def add_new_post():
     form = CreatePostForm()
@@ -162,7 +171,7 @@ def add_new_post():
         new_post = BlogPost(
             title=form.title.data,
             subtitle=form.subtitle.data,
-            body=form.body.data,
+            body=bleach.clean(text=form.body.data, tags=ALLOWED_TAGS),
             img_url=form.img_url.data,
             author=current_user,
             date=date.today().strftime('%B %d, %Y')
