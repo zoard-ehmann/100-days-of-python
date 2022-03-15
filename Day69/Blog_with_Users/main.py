@@ -136,6 +136,7 @@ def login():
             flash('Incorrect password. Please try again.')
         else:
             flash('That email doesn\'t exist. Try to register first.')
+            return redirect(url_for('register'))
     return render_template('login.html', form=login_form)
 
 
@@ -146,10 +147,21 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route('/post/<int:post_id>')
+@app.route('/post/<int:post_id>', methods=['GET', 'POST'])
 def show_post(post_id):
-    comment_form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        if current_user.is_authenticated:
+            db.session.add(Comment(
+                text=bleach.clean(text=comment_form.comment.data, tags=ALLOWED_TAGS),
+                author=current_user,
+                post=requested_post
+            ))
+            db.session.commit()
+            return redirect(url_for('show_post', post_id=post_id))
+        flash('Please log in to leave comments.')
+        return redirect(url_for('login'))
     return render_template('post.html', post=requested_post, is_admin=is_admin(), form=comment_form)
 
 
